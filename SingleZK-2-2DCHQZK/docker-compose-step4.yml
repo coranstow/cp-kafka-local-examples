@@ -1,0 +1,12 @@
+version: "3"
+services:
+    kafka_2:
+      image: confluentinc/cp-server:latest
+      hostname: kafka_2
+      container_name: kafka_2
+      depends_on:
+        - zookeeper_6
+        - zookeeper_7
+        - zookeeper_8
+      environment:
+        KAFKA_ZOOKEEPER_CONNECT: "zookeeper_6:2186,zookeeper_7:2187,zookeeper_8:2188"

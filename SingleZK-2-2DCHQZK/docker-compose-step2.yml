@@ -1,0 +1,74 @@
+version: "3"
+services:
+  zookeeper_1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_1
+    container_name: zookeeper_1
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_2:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_2
+    container_name: zookeeper_2
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_3:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_3
+    container_name: zookeeper_3
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_4:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_4
+    container_name: zookeeper_4
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_5:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_5
+    container_name: zookeeper_5
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_6:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_6
+    container_name: zookeeper_6
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_7:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_7
+    container_name: zookeeper_7
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"
+  zookeeper_8:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_8
+    container_name: zookeeper_8
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3:4:5;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;1;1;;;;;1;1;1"

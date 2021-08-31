@@ -1,0 +1,76 @@
+version: "3"
+services:
+  zookeeper_1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_1
+    container_name: zookeeper_1
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+  zookeeper_2:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_2
+    container_name: zookeeper_2
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+  zookeeper_3:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_3
+    container_name: zookeeper_3
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+  zookeeper_6:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_6
+    container_name: zookeeper_6
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+  zookeeper_7:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_7
+    container_name: zookeeper_7
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+  zookeeper_8:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_8
+    container_name: zookeeper_8
+    restart: always
+    environment:
+      # ZooKeeper HQ setting
+      ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
+      ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+  kafka_1:
+    image: confluentinc/cp-server:latest
+    hostname: kafka_1
+    container_name: kafka_1
+    depends_on:
+      - zookeeper_1
+      - zookeeper_2
+      - zookeeper_3
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183"
+  kafka_2:
+    image: confluentinc/cp-server:latest
+    hostname: kafka_2
+    container_name: kafka_2
+    depends_on:
+      - zookeeper_1
+      - zookeeper_2
+      - zookeeper_3
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183"
