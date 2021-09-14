@@ -1,0 +1,130 @@
+version: "3"
+services:
+  kafka_3:
+    image: confluentinc/cp-server:latest
+    hostname: kafka_3
+    container_name: kafka_3
+    depends_on:
+      - zookeeper_1
+      - zookeeper_2
+      - zookeeper_3
+      - zookeeper_4
+      - zookeeper_5
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183,zookeeper_4:2184,zookeeper_5:2185"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_3:29094,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9094
+      KAFKA_BROKER_ID: 10
+      KAFKA_BROKER_RACK: "DC2"
+      KAFKA_REPLICA_SELECTOR_CLASS: org.apache.kafka.common.replica.RackAwareReplicaSelector
+      # Default MRC Placement Strategy
+      #KAFKA_CONFLUENT_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_LOG_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_OFFSET_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      # Default Replication Strategy
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+      KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_JMX_OPTS: '-Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 5000
+      # Metric Reporter
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka_1:29092,kafka_2:29093,kafka_3:29094,kafka_4:29095"
+      KAFKA_CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183"
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 2
+      KAFKA_CONFLUENT_METRICS_ENABLE: 'true'
+      KAFKA_CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      # Balancer
+      # KAFKA_CONFLUENT_BALANCER_ENABLE: 'true'
+      # KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 2
+      # KAFKA_CONFLUENT_BALANCER_HEAL_UNEVEN_LOAD_TRIGGER: ANY_UNEVEN_LOAD
+      # KAFKA_CONFLUENT_BALANCER_HEAL_BROKER_FAILURE_THRESHOLD_MS: 5000
+      # KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 60
+      # KAFKA_LEADER_IMBALANCE_PER_BROKER_PERCENTAGE: 5
+      # LocalRest
+      KAFKA_KAFKA_REST_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka_1:29092,PLAINTEXT://kafka_2:29093,PLAINTEXT://kafka_3:29094,PLAINTEXT://kafka_4:29095"
+      KAFKA_CONFLUENT_HTTP_SERVER_LISTENERS: http://0.0.0.0:8092
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/kafka_broker.yml
+    ports:
+      - 9094:9094
+      - 8092:8092
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  kafka_4:
+    image: confluentinc/cp-server:latest
+    hostname: kafka_4
+    container_name: kafka_4
+    depends_on:
+      - zookeeper_1
+      - zookeeper_2
+      - zookeeper_3
+      - zookeeper_4
+      - zookeeper_5
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183,zookeeper_4:2184,zookeeper_5:2185"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_4:29095,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9095
+      KAFKA_BROKER_ID: 11
+      KAFKA_BROKER_RACK: "DC2"
+      KAFKA_REPLICA_SELECTOR_CLASS: org.apache.kafka.common.replica.RackAwareReplicaSelector
+      # Default MRC Placement Strategy
+      #KAFKA_CONFLUENT_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_LOG_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_OFFSET_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+
+      # Default Replication Strategy
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+      KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_JMX_OPTS: '-Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 5000
+      # Metric Reporter
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka_1:29092,kafka_2:29093"
+      KAFKA_CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: "zookeeper_6:2186,zookeeper_7:2187,zookeeper_8:2188"
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 2
+      KAFKA_CONFLUENT_METRICS_ENABLE: "true"
+      KAFKA_CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      # Balancer
+      KAFKA_CONFLUENT_BALANCER_ENABLE: "true"
+      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_BALANCER_HEAL_UNEVEN_LOAD_TRIGGER: ANY_UNEVEN_LOAD
+      KAFKA_CONFLUENT_BALANCER_HEAL_BROKER_FAILURE_THRESHOLD_MS: 5000
+      KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 60
+      KAFKA_LEADER_IMBALANCE_PER_BROKER_PERCENTAGE: 5
+      # LocalRest
+      KAFKA_KAFKA_REST_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka_1:29092,PLAINTEXT://kafka_2:29093,PLAINTEXT://kafka_3:29094,PLAINTEXT://kafka_4:29095"
+      KAFKA_CONFLUENT_HTTP_SERVER_LISTENERS: http://0.0.0.0:8093
+      # KAFKA_KAFKA_REST_DEBUG: "true"
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/kafka_broker.yml
+    ports:
+      - 9095:9095
+      - 8093:8093
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia

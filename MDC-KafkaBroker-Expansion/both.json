@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "replicas": [
+        {
+            "count": 2,
+            "constraints": {
+                "rack": "DC1"
+            }
+        },
+        {
+            "count": 2,
+            "constraints": {
+                "rack": "DC2"
+            }
+        }
+    ]
+}
