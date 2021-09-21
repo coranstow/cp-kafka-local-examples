@@ -1,0 +1,88 @@
+version: "3"
+services:
+  zookeeper_1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_1
+    container_name: zookeeper_1
+    restart: always
+    environment:
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+  zookeeper_2:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_2
+    container_name: zookeeper_2
+    restart: always
+    environment:
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+  zookeeper_3:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_3
+    container_name: zookeeper_3
+    restart: always
+    environment:
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+  zookeeper_4:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_4
+    container_name: zookeeper_4
+    restart: always
+    environment:
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+  zookeeper_5:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_5
+    container_name: zookeeper_5
+    restart: always
+    environment:
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+  zookeeper_6:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_6
+    container_name: zookeeper_6
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 10
+      ZOOKEEPER_CLIENT_PORT: 2186
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
+    ports:
+      - 2186:2186
+    volumes:
+      - $PWD/zk_template:/etc/confluent/docker
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  zookeeper_7:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper_7
+    container_name: zookeeper_7
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 11
+      ZOOKEEPER_CLIENT_PORT: 2187
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+
+      # Expand
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;zookeeper_4:22888:23888;zookeeper_5:22888:23888;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
+    ports:
+      - 2187:2187
+    volumes:
+      - $PWD/zk_template:/etc/confluent/docker
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
