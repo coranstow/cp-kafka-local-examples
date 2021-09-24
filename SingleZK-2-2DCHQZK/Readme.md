@@ -39,3 +39,5 @@ Then run:
 2. `2.switch2ZKHQ.sh` to enable ZooKeeper Hierarchical Quorums
 3. `3.shrinkZKDC1.sh` to decommission two of the original five ZooKeeper servers.
 4. `4.kafkaToLocalZK.sh` to update the kafka_2 server to use the new ZooKeeper servers.
+
+Zookeeper is now using Hierarchical Quorums across 6 servers.
