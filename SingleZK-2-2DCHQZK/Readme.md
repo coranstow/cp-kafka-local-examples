@@ -1,9 +1,9 @@
-#MDC-KafkaBroker-Expansion
+# MDC-KafkaBroker-Expansion
 
 This is a project to work through the challenges of expanding a Kafka/CP installation from a single DC to being a stretch across multiple DCs.
 This part of the project expands the Zookeeper ensemble.
 
-###Process
+### Process
 1. 0.init.sh - Sets up an installation using Docker-compose that contains
   * 5 Zookeeper nodes `zookeeper_[1-5]` with IDs `[1-5]`.
   * 3 Kafka Brokers
@@ -25,7 +25,7 @@ This part of the project expands the Zookeeper ensemble.
   * Update the Kafka Broker kafka_2 to use the new zookeeper ensemble zookkeeper_6 to zookeeper_8.
 6. clean.sh - uses docker-compose to drop all containers.
 
-###Demonstrating
+### Demonstrating
 
 Start with <code>0.init.sh </code> to set up a sample Confluent installation.
 After a minute or two Confluent Control Center should be available to `http://localhost:9021`
