@@ -1,0 +1,22 @@
+version: "3"
+services:
+  kafka_1:
+    image: confluentinc/cp-server:latest
+    hostname: kafka_1
+    container_name: kafka_1
+    depends_on:
+      - zookeeper_1
+      - zookeeper_2
+      - zookeeper_3
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183"
+  kafka_2:
+    image: confluentinc/cp-server:latest
+    hostname: kafka_2
+    container_name: kafka_2
+    depends_on:
+      - zookeeper_1
+      - zookeeper_2
+      - zookeeper_3
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper_1:2181,zookeeper_2:2182,zookeeper_3:2183"

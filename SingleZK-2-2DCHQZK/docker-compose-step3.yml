@@ -9,6 +9,7 @@ services:
       # ZooKeeper HQ setting
       ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
       ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;;;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888;zookeeper_8:22888:23888"
   zookeeper_2:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper_2
@@ -18,6 +19,7 @@ services:
       # ZooKeeper HQ setting
       ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
       ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;;;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888;zookeeper_8:22888:23888"
   zookeeper_3:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper_3
@@ -27,6 +29,7 @@ services:
       # ZooKeeper HQ setting
       ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
       ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;;;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888;zookeeper_8:22888:23888"
   zookeeper_6:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper_6
@@ -36,6 +39,7 @@ services:
       # ZooKeeper HQ setting
       ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
       ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;;;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888;zookeeper_8:22888:23888"
   zookeeper_7:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper_7
@@ -45,6 +49,7 @@ services:
       # ZooKeeper HQ setting
       ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
       ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;;;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888;zookeeper_8:22888:23888"
   zookeeper_8:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper_8
@@ -54,6 +59,7 @@ services:
       # ZooKeeper HQ setting
       ZOOKEEPER_GROUPS: "1:2:3;10:11:12"
       ZOOKEEPER_WEIGHTS: "1;1;1;;;;;;;1;1;1"
+      ZOOKEEPER_SERVERS: "zookeeper_1:22888:23888;zookeeper_2:22888:23888;zookeeper_3:22888:23888;;;;;;;zookeeper_6:22888:23888;zookeeper_7:22888:23888;zookeeper_8:22888:23888"
   kafka_1:
     image: confluentinc/cp-server:latest
     hostname: kafka_1
