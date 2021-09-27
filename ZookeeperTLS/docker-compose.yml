@@ -10,39 +10,29 @@ services:
     restart: always
     environment:
       ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 12181
+      ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
-      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
-
-      # Zookeeper mTLS Settings
       ZOOKEEPER_SERVER_CNXN_FACTORY: "org.apache.zookeeper.server.NettyServerCnxnFactory"
-      ZOOKEEPER_SECURE_CLIENT_PORT: 2181
-      ZOOKEEPER_AUTH_PROVIDER_X509: "org.apache.zookeeper.server.auth.X509AuthenticationProvider"
-      ZOOKEEPER_SSL_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-1.keystore.jks
-      ZOOKEEPER_SSL_KEYSTORE_PASSWORD: "keystorepass"
-      ZOOKEEPER_SSL_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
-      ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD: "truststorepass"
-
-      # Zookeeper Quorum mTLS settings
-      ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-1.quorum.keystore.jks
+      ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-1.keystore.jks
       ZOOKEEPER_SSL_QUORUM_KEYSTORE_PASSWORD: "keystorepass"
-      ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION: /usr/share/keystores/zookeeper.quorum.truststore.jks
+      ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
       ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_PASSWORD: "truststorepass"
       ZOOKEEPER_SSL_QUORUM: "true"
       #ZOOKEEPER_SSL_QUORUM_HOSTNAME_VERIFICATION: "false"
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
 
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
     ports:
       - 2181:2181
     volumes:
+#      - $PWD/zk_template:/etc/confluent/docker
       - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
       - $PWD/assets/jolokia:/usr/share/jolokia
       - $PWD/keystores:/usr/share/keystores
-      #      - $PWD/zk_template:/etc/confluent/docker
     networks:
       - zookeepertls
   zookeeper-2:
@@ -52,35 +42,26 @@ services:
     restart: always
     environment:
       ZOOKEEPER_SERVER_ID: 2
-      ZOOKEEPER_CLIENT_PORT: 12182
+      ZOOKEEPER_CLIENT_PORT: 2182
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
-      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
-
-      # Zookeeper mTLS Settings
       ZOOKEEPER_SERVER_CNXN_FACTORY: "org.apache.zookeeper.server.NettyServerCnxnFactory"
-      ZOOKEEPER_SECURE_CLIENT_PORT: 2182
-      ZOOKEEPER_AUTH_PROVIDER_X509: "org.apache.zookeeper.server.auth.X509AuthenticationProvider"
-      ZOOKEEPER_SSL_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-2.keystore.jks
-      ZOOKEEPER_SSL_KEYSTORE_PASSWORD: "keystorepass"
-      ZOOKEEPER_SSL_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
-      ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD: "truststorepass"
-
-      # Zookeeper Quorum mTLS settings
-      ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-2.quorum.keystore.jks
+      ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-2.keystore.jks
       ZOOKEEPER_SSL_QUORUM_KEYSTORE_PASSWORD: "keystorepass"
-      ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION: /usr/share/keystores/zookeeper.quorum.truststore.jks
+      ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
       ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_PASSWORD: "truststorepass"
       ZOOKEEPER_SSL_QUORUM: "true"
       #ZOOKEEPER_SSL_QUORUM_HOSTNAME_VERIFICATION: "false"
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
 
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
     ports:
       - 2182:2182
     volumes:
+#      - $PWD/zk_template:/etc/confluent/docker
       - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
       - $PWD/assets/jolokia:/usr/share/jolokia
       - $PWD/keystores:/usr/share/keystores
@@ -93,35 +74,26 @@ services:
     restart: always
     environment:
       ZOOKEEPER_SERVER_ID: 3
-      ZOOKEEPER_CLIENT_PORT: 12183
+      ZOOKEEPER_CLIENT_PORT: 2183
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
-      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
-
-      # Zookeeper mTLS Settings
       ZOOKEEPER_SERVER_CNXN_FACTORY: "org.apache.zookeeper.server.NettyServerCnxnFactory"
-      ZOOKEEPER_SECURE_CLIENT_PORT: 2183
-      ZOOKEEPER_AUTH_PROVIDER_X509: "org.apache.zookeeper.server.auth.X509AuthenticationProvider"
-      ZOOKEEPER_SSL_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-3.keystore.jks
-      ZOOKEEPER_SSL_KEYSTORE_PASSWORD: "keystorepass"
-      ZOOKEEPER_SSL_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
-      ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD: "truststorepass"
-
-      # Zookeeper Quorum mTLS settings
-      ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-3.quorum.keystore.jks
+      ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION: /usr/share/keystores/zookeeper-3.keystore.jks
       ZOOKEEPER_SSL_QUORUM_KEYSTORE_PASSWORD: "keystorepass"
-      ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION: /usr/share/keystores/zookeeper.quorum.truststore.jks
+      ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
       ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_PASSWORD: "truststorepass"
       ZOOKEEPER_SSL_QUORUM: "true"
       #ZOOKEEPER_SSL_QUORUM_HOSTNAME_VERIFICATION: "false"
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
 
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
     ports:
       - 2183:2183
     volumes:
+#      - $PWD/zk_template:/etc/confluent/docker
       - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
       - $PWD/assets/jolokia:/usr/share/jolokia
       - $PWD/keystores:/usr/share/keystores
@@ -136,7 +108,7 @@ services:
       - zookeeper-2
       - zookeeper-3
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183,zookeeper-4:2184,zookeeper-5:2185"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:29092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
@@ -179,20 +151,6 @@ services:
       # KAFKA_LEADER_IMBALANCE_PER_BROKER_PERCENTAGE: 5
       # LocalRest
       KAFKA_KAFKA_REST_ADVERTISED_LISTENERS: http://localhost:8090
-
-      # Kafka SSL Settings for mtls with Zookeeper
-      # Required to use TLS-to-ZooKeeper (default is false)
-      KAFKA_ZOOKEEPER_SSL_CLIENT_ENABLE: "true"
-      KAFKA_ZOOKEEPER_CLIENT_CNXN_SOCKET: "org.apache.zookeeper.ClientCnxnSocketNetty"
-      KAFKA_ZOOKEEPER_SSL_KEYSTORE_LOCATION: /usr/share/keystores/kafka-1.keystore.jks
-      KAFKA_ZOOKEEPER_SSL_KEYSTORE_PASSWORD: "keystorepass"
-      KAFKA_ZOOKEEPER_SSL_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
-      KAFKA_ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD: "truststorepass"
-      # Tells broker to create ACLs on znodes
-      KAFKA_ZOOKEEPER_SET_ACL: "false"
-      #KAFKA_OPTS: "-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"
-
-
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/kafka_broker.yml
     ports:
@@ -202,7 +160,6 @@ services:
     volumes:
       - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
       - $PWD/assets/jolokia:/usr/share/jolokia
-      - $PWD/keystores:/usr/share/keystores
     networks:
       - zookeepertls
   kafka-2:
@@ -214,7 +171,7 @@ services:
       - zookeeper-2
       - zookeeper-3
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183,zookeeper-4:2184,zookeeper-5:2185"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:29093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
@@ -259,20 +216,6 @@ services:
       # LocalRest
       KAFKA_KAFKA_REST_ADVERTISED_LISTENERS: http://kafka-2:8091
       # KAFKA_KAFKA_REST_DEBUG: "true"
-
-      # Kafka SSL Settings for mtls with Zookeeper
-      # Required to use TLS-to-ZooKeeper (default is false)
-      KAFKA_ZOOKEEPER_SSL_CLIENT_ENABLE: "true"
-      KAFKA_ZOOKEEPER_CLIENT_CNXN_SOCKET: "org.apache.zookeeper.ClientCnxnSocketNetty"
-      KAFKA_ZOOKEEPER_SSL_KEYSTORE_LOCATION: /usr/share/keystores/kafka-2.keystore.jks
-      KAFKA_ZOOKEEPER_SSL_KEYSTORE_PASSWORD: "keystorepass"
-      KAFKA_ZOOKEEPER_SSL_TRUSTSTORE_LOCATION: /usr/share/keystores/kafka.server.truststore.jks
-      KAFKA_ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD: "truststorepass"
-      # Tells broker to create ACLs on znodes
-      KAFKA_ZOOKEEPER_SET_ACL: "false"
-      #KAFKA_OPTS: "-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"
-
-
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/kafka_broker.yml
     ports:
@@ -281,7 +224,6 @@ services:
     volumes:
       - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
       - $PWD/assets/jolokia:/usr/share/jolokia
-      - $PWD/keystores:/usr/share/keystores
     networks:
       - zookeepertls
   node-exporter:

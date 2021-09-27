@@ -8,7 +8,5 @@ CA_KEY=$CERT_DIR/ca-key.pem
 KEYSTORE_DIR=./keystores
 CLIENT_TRUSTSTORE=$KEYSTORE_DIR/kafka.client.truststore.jks
 SERVER_TRUSTSTORE=$KEYSTORE_DIR/kafka.server.truststore.jks
-QUORUM_TRUSTSTORE=$KEYSTORE_DIR/zookeeper.quorum.truststore.jks
-
 
 DOMAIN=".zookeepertls"
