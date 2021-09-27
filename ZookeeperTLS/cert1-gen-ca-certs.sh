@@ -31,7 +31,7 @@ keytool -noprompt -import \
     -keypass truststorepass
 
 echo " >>> Create the Kafka Client TrustSture and import the CA Certificate "
-keytool -noprompt -keystore kafka.client.truststore.jks -alias CARoot -importcert -file $CA_CRT -storepass truststorepass -keypass truststorepass
+keytool -noprompt -keystore $CLIENT_TRUSTSTORE -alias CARoot -importcert -file $CA_CRT -storepass truststorepass -keypass truststorepass
 
 echo " >>> Create the Kafka Server TrustSture and import the CA Certificate "
-keytool -noprompt -keystore kafka.server.truststore.jks -alias CARoot -importcert -file $CA_CRT -storepass truststorepass -keypass truststorepass
+keytool -noprompt -keystore $SERVER_TRUSTSTORE -alias CARoot -importcert -file $CA_CRT -storepass truststorepass -keypass truststorepass

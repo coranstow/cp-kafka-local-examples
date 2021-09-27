@@ -29,7 +29,7 @@ for line in `sed '/^$/d' $filename`; do
       echo "Service: $service hostname: $internal dns:$internal dns:$fqdn"
 
       alias=$service.$internal
-      KEYSTORE_FILENAME=$internal.keystore.jks
+      KEYSTORE_FILENAME=$KEYSTORE_DIR/$internal.keystore.jks
 
       CSR_FILENAME=$CERT_DIR/$internal-csr.pem
       CRT_SIGNED_FILENAME=$CERT_DIR/$internal-ca1-signed.crt
@@ -57,7 +57,7 @@ distinguished_name = req_distinguished_name
 x509_extensions = v3_req
 prompt = no
 [req_distinguished_name]
-CN = $service
+CN = $fqdn
 [v3_req]
 subjectAltName = @alt_names
 [alt_names]

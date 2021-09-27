@@ -3,8 +3,6 @@
 
 . ./set_env.sh
 
-rm *.jks
-
 filename="certificate-hosts"
 # remove the empty lines
 for line in `sed '/^$/d' $filename`; do
@@ -20,15 +18,15 @@ for line in `sed '/^$/d' $filename`; do
       echo "Service: $service hostname: $internal"
 
       alias=$service.$internal
-      KEYSTORE_FILENAME=$internal.keystore.jks
+      KEYSTORE_FILENAME=$KEYSTORE_DIR/$internal.keystore.jks
 
       CSR_FILENAME=$CERT_DIR/$internal-csr.pem
       CRT_SIGNED_FILENAME=$CERT_DIR/$internal-ca1-signed.crt
       KEY_FILENAME=$CERT_DIR/$internal-key.pem
       # EXT="SAN=dns:$internal"
 
-
-      [[ -z "$DOMAIN" ]] && EXT="SAN=dns:$internal" || EXT="SAN=dns:$internal,dns:$internal$DOMAIN"
+      fqdn=$internal$DOMAIN
+      [[ -z "$DOMAIN" ]] && EXT="SAN=dns:$internal" || EXT="SAN=dns:$internal,dns:$fqdn"
       echo "EXT = $EXT"
       #FORMAT=$1
       FORMAT=pkcs12
@@ -36,8 +34,8 @@ for line in `sed '/^$/d' $filename`; do
       echo "  >>>  Create host keystore"
       keytool -genkeypair -noprompt \
           -keystore $KEYSTORE_FILENAME \
-          -alias $alias \
-          -dname "CN=$service,OU=example,O=CONFLUENT,L=PaloAlto,ST=Ca,C=US" \
+          -alias $fqdn \
+          -dname "cn=$fqdn" \
           -ext $EXT \
           -keyalg RSA \
           -storetype $FORMAT \
@@ -59,7 +57,7 @@ for line in `sed '/^$/d' $filename`; do
       echo "  >>>  Create the certificate signing request (CSR)"
       keytool -certreq \
           -keystore $KEYSTORE_FILENAME \
-          -alias $alias \
+          -alias $fqdn \
     			-ext $EXT \
           -file $CSR_FILENAME \
           -storepass keystorepass \

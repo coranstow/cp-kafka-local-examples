@@ -1,7 +1,5 @@
 #!/bin/bash
-# Shamelessly copied from ~/cp-ansible/roles/confluent.test/molecule/certs-create.sh
-# and modified from there
-# This script instantiated the keystore for each nod and generates a CSR
+# This script instantiated the keystore for each node and generates a CSR
 
 # set -o nounset \
 #     -o errexit \
@@ -27,7 +25,7 @@ for line in `sed '/^$/d' $filename`; do
       echo "Service: $service hostname: $internal dns:$internal dns:$fqdn"
 
       alias=$service.$internal
-      KEYSTORE_FILENAME=$internal.keystore.jks
+      KEYSTORE_FILENAME=$KEYSTORE_DIR/$internal.keystore.jks
 
       CSR_FILENAME=$internal.csr
       CRT_SIGNED_FILENAME=$CERT_DIR/$internal-ca1-signed.crt
@@ -62,9 +60,18 @@ for line in `sed '/^$/d' $filename`; do
       echo "  >>> Import the host certificate into the keystore"
       keytool -noprompt -import \
           -keystore $KEYSTORE_FILENAME \
-          -alias $alias \
+          -alias $fqdn \
           -file $CRT_SIGNED_FILENAME \
           -storepass keystorepass \
           -keypass keystorepass
+
+      echo " >>> Import the host certificate into the  truststore"
+      keytool -noprompt -keystore $SERVER_TRUSTSTORE \
+            -alias $fqdn \
+            -importcert \
+            -file $CRT_SIGNED_FILENAME \
+            -storepass truststorepass \
+            -keypass truststorepass
+
 
 done
