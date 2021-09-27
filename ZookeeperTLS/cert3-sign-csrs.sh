@@ -57,7 +57,7 @@ distinguished_name = req_distinguished_name
 x509_extensions = v3_req
 prompt = no
 [req_distinguished_name]
-CN = $fqdn
+CN = "cn=mTLS_User,O=CONFLUENT,L=PaloAlto,ST=Ca,C=US"
 [v3_req]
 subjectAltName = @alt_names
 [alt_names]
