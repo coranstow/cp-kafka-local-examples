@@ -1,0 +1,308 @@
+version: "3"
+services:
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-1
+    container_name: zookeeper-1
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
+    ports:
+      - 2181:2181
+    volumes:
+      - $PWD/zk_template:/etc/confluent/docker
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-2
+    container_name: zookeeper-2
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: 2182
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
+    ports:
+      - 2182:2182
+    volumes:
+      - $PWD/zk_template:/etc/confluent/docker
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  zookeeper-3:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-3
+    container_name: zookeeper-3
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: 2183
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
+    ports:
+      - 2183:2183
+    volumes:
+      - $PWD/zk_template:/etc/confluent/docker
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  kafka-1:
+    image: confluentinc/cp-server:latest
+    hostname: kafka-1
+    container_name: kafka-1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183,zookeeper-4:2184,zookeeper-5:2185"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:29092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_BROKER_ID: 0
+      KAFKA_BROKER_RACK: "DC1"
+      KAFKA_REPLICA_SELECTOR_CLASS: org.apache.kafka.common.replica.RackAwareReplicaSelector
+      # Default MRC Placement Strategy
+      #KAFKA_CONFLUENT_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_LOG_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_OFFSET_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      # Default Replication Strategy
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+      KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_JMX_OPTS: '-Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 5000
+      # Metric Reporter
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093"
+      KAFKA_CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183"
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 2
+      KAFKA_CONFLUENT_METRICS_ENABLE: 'true'
+      KAFKA_CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      # Balancer
+      # KAFKA_CONFLUENT_BALANCER_ENABLE: 'true'
+      # KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 2
+      # KAFKA_CONFLUENT_BALANCER_HEAL_UNEVEN_LOAD_TRIGGER: ANY_UNEVEN_LOAD
+      # KAFKA_CONFLUENT_BALANCER_HEAL_BROKER_FAILURE_THRESHOLD_MS: 5000
+      # KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 60
+      # KAFKA_LEADER_IMBALANCE_PER_BROKER_PERCENTAGE: 5
+      # LocalRest
+      KAFKA_KAFKA_REST_ADVERTISED_LISTENERS: http://localhost:8090
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/kafka_broker.yml
+    ports:
+      - 1234:1234
+      - 9092:9092
+      - 8090:8090
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  kafka-2:
+    image: confluentinc/cp-server:latest
+    hostname: kafka-2
+    container_name: kafka-2
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2182,zookeeper-3:2183,zookeeper-4:2184,zookeeper-5:2185"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:29093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
+      KAFKA_BROKER_ID: 1
+      KAFKA_BROKER_RACK: "DC1-O"
+      KAFKA_REPLICA_SELECTOR_CLASS: org.apache.kafka.common.replica.RackAwareReplicaSelector
+      # Default MRC Placement Strategy
+      #KAFKA_CONFLUENT_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_LOG_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+      #KAFKA_CONFLUENT_OFFSET_PLACEMENT_CONSTRAINTS: '{"version": 2,"replicas": [{"count": 1,"constraints": {"rack": "DC1"}},{"count": 1,"constraints": {"rack": "DC2"}}],"observers": [{"count": 1,"constraints": {"rack": "DC1-O"}},{"count": 1,"constraints": {"rack": "DC2-O"}}],"observerPromotionPolicy":"under-min-isr"}'
+
+      # Default Replication Strategy
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+      KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_JMX_OPTS: '-Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 5000
+      # Metric Reporter
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093"
+      KAFKA_CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: "zookeeper-6:2186,zookeeper-7:2187,zookeeper-8:2188"
+      KAFKA_CONFLUENT_SECURITY_EVENT_LOGGER_EXPORTER_KAFKA_TOPIC_REPLICAS: 2
+      KAFKA_KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 2
+      KAFKA_CONFLUENT_METRICS_ENABLE: "true"
+      KAFKA_CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      # Balancer
+      KAFKA_CONFLUENT_BALANCER_ENABLE: "true"
+      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_CONFLUENT_BALANCER_HEAL_UNEVEN_LOAD_TRIGGER: ANY_UNEVEN_LOAD
+      KAFKA_CONFLUENT_BALANCER_HEAL_BROKER_FAILURE_THRESHOLD_MS: 5000
+      KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 60
+      KAFKA_LEADER_IMBALANCE_PER_BROKER_PERCENTAGE: 5
+      # LocalRest
+      KAFKA_KAFKA_REST_ADVERTISED_LISTENERS: http://kafka-2:8091
+      # KAFKA_KAFKA_REST_DEBUG: "true"
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/kafka_broker.yml
+    ports:
+      - 9093:9093
+      - 8091:8091
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+  node-exporter:
+    image: prom/node-exporter:v0.18.1
+    container_name: node-exporter
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - kafka-1
+      - kafka-2
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points'
+      - '^(aufs|proc|nsfs|shm|cgroup|tmpfs|binfmt_misc|debugfs|devpts|fusectl|hugetlbfs|fuse.lxcfs|mqueue|pstore|securityfs|sysfs|autofs|devtmpfs|configfs)'
+  prometheus:
+    image: prom/prometheus:v2.11.1
+    container_name: prometheus
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - kafka-1
+      - kafka-2
+    ports:
+      - 9090:9090
+    volumes:
+      - $PWD/assets/prometheus/prometheus-config/:/etc/prometheus/
+  schemaregistry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema-registry
+    container_name: schema-registry
+    restart: always
+    depends_on:
+      - kafka-1
+      - kafka-2
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka-1:29092,PLAINTEXT://kafka-2:29093"
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+    ports:
+      - 8081:8081
+  connect1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: connect1
+    container_name: connect1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - kafka-1
+      - kafka-2
+      - schemaregistry
+    ports:
+      - 8083:8083
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka-1:29092,kafka-2:29093'
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect1
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 2
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 2
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 2
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.3.1.jar
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+      CONNECT_LOG4J_ROOT_LEVEL: DEBUG
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:latest
+    hostname: control-center
+    container_name: control-center
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - schemaregistry
+      - connect1
+    ports:
+      - 9021:9021
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093"
+      CONTROL_CENTER_STREAMS_CPREST_URL: http://kafka-1:8090
+      CONTROL_CENTER_CONNECT_CONNECT1_CLUSTER: "connect1:8083"
+      CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
+      CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://localhost:8088"
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONTROL_CENTER_REPLICATION_FACTOR: 2
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 2
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 2
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 2
+      PORT: 9021
+  tools:
+    image: confluentinc/cp-server:latest
+    hostname: tools
+    container_name: tools
+    depends_on:
+      - kafka-1
+      - kafka-2
+#    volumes:
+#      - ./scripts/helper:/tmp/helper
+#      - ./scripts/security:/etc/kafka/secrets
+    entrypoint: /bin/bash
+    tty: true
+    environment:
+      TZ: Australia/Sydney

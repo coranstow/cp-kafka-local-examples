@@ -1,0 +1,8 @@
+zookeeper:zookeeper-1
+zookeeper:zookeeper-2
+zookeeper:zookeeper-3
+kafka_broker:kafka-1
+kafka_broker:kafka-2
+kafka_connect:connect1
+kafka_connect:schemaregistry
+control-center:control-center
