@@ -1,4 +1,4 @@
-# ZooKeeper TLS Demoonstration
+# ZooKeeper TLS Demonstration
 
 This is a project to demonstrate the securing of Zookeeper with TLS, both for client connections and for connections that are internal to the zookeeper ensemble.
 
