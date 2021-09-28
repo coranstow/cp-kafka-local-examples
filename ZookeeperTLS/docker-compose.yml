@@ -38,6 +38,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml
     ports:
       - 2181:2181
+      - 12181:12181
     volumes:
       - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
       - $PWD/assets/jolokia:/usr/share/jolokia
