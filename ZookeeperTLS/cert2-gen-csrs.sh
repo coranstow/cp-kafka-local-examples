@@ -35,7 +35,7 @@ for line in `sed '/^$/d' $filename`; do
       keytool -genkeypair -noprompt \
           -keystore $KEYSTORE_FILENAME \
           -alias $fqdn \
-          -dname "cn=$fqdn" \
+          -dname "cn=mTLS_User,O=CONFLUENT,L=PaloAlto,ST=Ca,C=US" \
           -ext $EXT \
           -keyalg RSA \
           -storetype $FORMAT \
