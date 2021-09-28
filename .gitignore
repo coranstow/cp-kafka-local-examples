@@ -1,1 +1,4 @@
 .DS_Store
+ZookeeperTLS/certs/*
+ZookeeperTLS/keystores/*
+
