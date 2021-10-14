@@ -1,9 +1,10 @@
 ---
 # Source: cp-helm-charts/charts/cp-zookeeper/templates/poddisruptionbudget.yaml
-apiVersion: policy/v1beta1
+apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: my-confluent-oss-cp-zookeeper-pdb
+  namespace: confluent
   labels:
     app: cp-zookeeper
     chart: cp-zookeeper-0.1.0
@@ -21,6 +22,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-confluent-oss-cp-zookeeper-headless
+  namespace: confluent
   labels:
     app: cp-zookeeper
     chart: cp-zookeeper-0.1.0
@@ -42,6 +44,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-confluent-oss-cp-zookeeper
+  namespace: confluent
   labels:
     app: cp-zookeeper
     chart: cp-zookeeper-0.1.0
@@ -58,11 +61,48 @@ spec:
     app: cp-zookeeper
     release: my-confluent-oss
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-confluent-oss-cp-zookeeper-jmx-configmap
+  namespace: confluent
+  labels:
+    app: cp-zookeeper
+data:
+  jmx-zookeeper-prometheus.yml: |+
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:5555/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    whitelistObjectNames:
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*,name1=replica.*
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*,name1=replica.*,name2=*
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*,name1=replica.*,name2=*,name3=*
+    rules:
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+)><>(\\w+)"
+      name: "cp_zookeeper_$2"
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+)><>(\\w+)"
+      name: "cp_zookeeper_$3"
+      labels:
+        replicaId: "$2"
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+)><>(\\w+)"
+      name: "cp_zookeeper_$4"
+      labels:
+        replicaId: "$2"
+        memberType: "$3"
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+), name3=(\\w+)><>(\\w+)"
+      name: "cp_zookeeper_$4_$5"
+      labels:
+        replicaId: "$2"
+        memberType: "$3"
+---
 # Source: cp-helm-charts/charts/cp-zookeeper/templates/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: my-confluent-oss-cp-zookeeper
+  namespace: confluent
   labels:
     app: cp-zookeeper
     chart: cp-zookeeper-0.1.0
@@ -160,7 +200,13 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-          value: "my-confluent-oss-cp-zookeeper-0.my-confluent-oss-cp-zookeeper-headless.confluent:2888:3888;my-confluent-oss-cp-zookeeper-1.my-confluent-oss-cp-zookeeper-headless.confluent:2888:3888;my-confluent-oss-cp-zookeeper-2.my-confluent-oss-cp-zookeeper-headless.confluent:2888:3888"
+        # C0 = C02FL1FHMD6T.stow C1 = DESKTOP-1KSC6OQ.stow
+          value: "remote-zookeeper-1.confluent:2888:3888;remote-zookeeper-2.confluent:2888:3888;remote-zookeeper-3.confluent:2888:3888;remote-zookeeper-4.confluent:2888:3888;remote-zookeeper-5.confluent:2888:3888;my-confluent-oss-cp-zookeeper-0.my-confluent-oss-cp-zookeeper-headless.confluent:2888:3888;my-confluent-oss-cp-zookeeper-1.my-confluent-oss-cp-zookeeper-headless.confluent:2888:3888;my-confluent-oss-cp-zookeeper-2.my-confluent-oss-cp-zookeeper-headless.confluent:2888:3888"
+        #Zookeeper Hierarhical Quorums
+        - name: ZOOKEEPER_GROUPS
+          value:  "1:2:3:4:5;6:7:8"
+        - name: ZOOKEEPER_WEIGHTS
+          value: "1;1;1;1;1;1;1;1"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID
@@ -172,7 +218,7 @@ spec:
         - "-c"
         - |
           ZK_FIX_HOST_REGEX="s/${HOSTNAME}\.[^:]*:/0.0.0.0:/g"
-          ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+1)) \
+          ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+6)) \
           ZOOKEEPER_SERVERS=`echo $ZOOKEEPER_SERVERS | sed -e "$ZK_FIX_HOST_REGEX"` \
           /etc/confluent/docker/run
         volumeMounts:

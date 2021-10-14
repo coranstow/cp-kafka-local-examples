@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: remote-zookeeper-11
+  namespace: confluent
+spec:
+  type: ExternalName
+  externalName: a1a6aa2c14300422b9c4ba0bb36862e3-101706933.ap-southeast-2.elb.amazonaws.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: remote-zookeeper-12
+  namespace: confluent
+spec:
+  type: ExternalName
+  externalName: a1a09f74b18c947e4ba3c72cb8ea433a-630730765.ap-southeast-2.elb.amazonaws.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: remote-zookeeper-13
+  namespace: confluent
+spec:
+  type: ExternalName
+  externalName: a9482347f24f04f9d9ce04298335087a-2090600650.ap-southeast-2.elb.amazonaws.com
