@@ -1,22 +1,22 @@
-#---
+---
 # Source: cp-helm-charts/charts/cp-zookeeper/templates/poddisruptionbudget.yaml
-#apiVersion: policy/v1
-#kind: PodDisruptionBudget
-#metadata:
-#  name: confluent-cp-zookeeper-pdb
-#  namespace: confluent
-#  labels:
-#    app: cp-zookeeper
-#    chart: cp-zookeeper-0.1.0
-#    release: confluent
-#    heritage: Helm
-#spec:
-#  selector:
-#    matchLabels:
-#      app: cp-zookeeper
-#      release: confluent
-#  maxUnavailable: 1
-#---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: confluent-cp-zookeeper-pdb
+  namespace: confluent
+  labels:
+    app: cp-zookeeper
+    chart: cp-zookeeper-0.1.0
+    release: confluent
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: cp-zookeeper
+      release: confluent
+  maxUnavailable: 1
+---
 # Source: cp-helm-charts/charts/cp-zookeeper/templates/headless-service.yaml
 apiVersion: v1
 kind: Service
@@ -115,7 +115,7 @@ spec:
       release: confluent
   serviceName: confluent-cp-zookeeper-headless
   podManagementPolicy: OrderedReady
-  replicas: 3
+  replicas: 2
   updateStrategy:
     type: RollingUpdate
   template:
