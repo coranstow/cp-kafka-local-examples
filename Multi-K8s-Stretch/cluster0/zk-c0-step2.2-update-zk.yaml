@@ -102,12 +102,7 @@ spec:
           value: "2181"
         - name : ZOOKEEPER_SERVERS
         # C0 = C02FL1FHMD6T.stow C1 = DESKTOP-1KSC6OQ.stow
-          value: "zookeeper-0.confluent:2888:3888;zookeeper-1.confluent:2888:3888;zookeeper-2.confluent:2888:3888;zookeeper-3.confluent:2888:3888"
-        #Zookeeper Hierarhical Quorums
-        - name: ZOOKEEPER_GROUPS
-          value:  "1:2:3;4:5:6"
-        - name: ZOOKEEPER_WEIGHTS
-          value: "1;1;1;0;0;0"
+          value: "zookeeper-0.confluent:2888:3888;zookeeper-1.confluent:2888:3888;zookeeper-2.confluent:2888:3888;zookeeper-3.confluent:2888:3888;zookeeper-4.confluent:2888:3888"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID
@@ -118,7 +113,7 @@ spec:
         - "bash"
         - "-c"
         - |
-          ZK_FIX_HOST_REGEX="s/${HOSTNAME}\.[^:]*:/0.0.0.0:/g"
+          ZK_FIX_HOST_REGEX="s/zookeeper-${HOSTNAME##*-}\.[^:]*:/0.0.0.0:/g"
           ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+1)) \
           ZOOKEEPER_SERVERS=`echo $ZOOKEEPER_SERVERS | sed -e "$ZK_FIX_HOST_REGEX"` \
           /etc/confluent/docker/run
