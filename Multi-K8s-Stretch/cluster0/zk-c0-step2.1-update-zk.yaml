@@ -101,7 +101,6 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-        # C0 = C02FL1FHMD6T.stow C1 = DESKTOP-1KSC6OQ.stow
           value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888;zookeeper-3.confluent:2888:3888;zookeeper-4.confluent:2888:3888;zookeeper-5.confluent:2888:3888"
         #Zookeeper Hierarhical Quorums
         #- name: ZOOKEEPER_GROUPS
