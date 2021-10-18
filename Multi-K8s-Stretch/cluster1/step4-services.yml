@@ -86,7 +86,6 @@ spec:
     #app: cp-zookeeper
     release: confluent
     statefulset.kubernetes.io/pod-name: confluent-cp-zookeeper-2
-
 ---
 apiVersion: v1
 kind: Service
@@ -95,7 +94,7 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a5d93682b11294ec092dd878eaf6af48-349182005.ap-southeast-2.elb.amazonaws.com
+  externalName: a794d70b9c6b149d6af30435cd63ee90-1206107056.ap-southeast-2.elb.amazonaws.com
 ---
 apiVersion: v1
 kind: Service
@@ -104,7 +103,7 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a3755baac4ab048279a3e920f513a14b-1711207951.ap-southeast-2.elb.amazonaws.com
+  externalName: aec688be18d7747d5929828996bd3d88-1662494941.ap-southeast-2.elb.amazonaws.com
 ---
 apiVersion: v1
 kind: Service
@@ -113,4 +112,4 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a80525acc26b941efb0266fa19c11eaf-1645425057.ap-southeast-2.elb.amazonaws.com
+  externalName: a4b9d8fa9a1384363be3a23aab161839-1023604300.ap-southeast-2.elb.amazonaws.com
