@@ -8,7 +8,7 @@ One of the challenges is that for all its strengths as an application platform, 
 
 In the case of a single Kubernetes cluster we can use StatefulSets to manage the ZooKeeper and Kafka nodes, each of which must have a distinct ID. When we are stretching the Confluent cluster acres multiple Kubernetes Clusters, however, we need to more carefully manage how ZooKeeper and Kafka IDs are created so that they don't collide.
 
-We also have to go to some effort to ensure that all of the nodes in each cluster that need to talk to each other can do so. For this we need to configure our Kubernetes services so that all the nodes can talk to all f the other nodes that they need to talk to.
+We also have to go to some effort to ensure that all of the nodes in each cluster that need to talk to each other can do so. For this we need to configure our Kubernetes services so that all the nodes can talk to all of the other nodes that they need to talk to.
 
 Why even use Kubernetes when this would be much simpler with just some VMs? Well, because sometimes you are told to use Kubernetes and that's all there is to it.
 
@@ -30,6 +30,8 @@ This was developed and tested on Kubernetes Clusters on AWS.
 2. Deploy Confluent Platform to `cluster-0` using the Helm charts at https://github.com/confluentinc/cp-helm-charts.
 
 I don't think the Confluent Operator will support what we're trying to do here, so we'll use Helm for the installation instead of the Confluent Operator.
+
+Note also that there will be an outage for Zookeeper during this process, at least at the point that the StatefulSet rolling restarts to apply the final Zookeeper Hierarchical Quorums setttings. It _might_ be possible to avoid an outage by setting the StatefulSet restart policy to onDelete and manually deleting pods in turn and waiting for ZooKeeper to stabilise between deletes.
 
 ## Process
 
