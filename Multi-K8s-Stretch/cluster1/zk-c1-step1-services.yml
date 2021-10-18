@@ -95,7 +95,7 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a9dbb8d03ada7416293c90e4337c3eda-992348493.ap-southeast-2.elb.amazonaws.com
+  externalName: a5d93682b11294ec092dd878eaf6af48-349182005.ap-southeast-2.elb.amazonaws.com
 ---
 apiVersion: v1
 kind: Service
@@ -104,7 +104,7 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: afa7ff3b33f114b82aa5d6d61def9b84-1094228810.ap-southeast-2.elb.amazonaws.com
+  externalName: a3755baac4ab048279a3e920f513a14b-1711207951.ap-southeast-2.elb.amazonaws.com
 ---
 apiVersion: v1
 kind: Service
@@ -113,4 +113,4 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a4a25840bd7b14c329d3d22700756f43-1649301520.ap-southeast-2.elb.amazonaws.com
+  externalName: a80525acc26b941efb0266fa19c11eaf-1645425057.ap-southeast-2.elb.amazonaws.com
