@@ -1,13 +1,52 @@
 # Multi DC Example using k8s Clusters
 
-## Assumes
-* You can run Kubernetes Locally
-* You have Clusters admin access to the k8s Cluster
+This demo is designed to demonstrate the deployment of Confluent Platform stretched across two Kubernetes clusters. This driven by the intersection of two separate business requirements:
+1. Standardise everything onto Kubernetes as a common Platform.
+2. Stretch Confluent Platform across regions to provide HA/DR. See https://docs.confluent.io/platform/current/multi-dc-deployments/index.html
 
+One of the challenges is that for all its strengths as an application platform, Kubernetes actually gets in the way a bit for middleware systems that are distributed and stateful.
+
+In the case of a single Kubernetes cluster we can use StatefulSets to manage the ZooKeeper and Kafka nodes, each of which must have a distinct ID. When we are stretching the Confluent cluster acres multiple Kubernetes Clusters, however, we need to more carefully manage how ZooKeeper and Kafka IDs are created so that they don't collide.
+
+We also have to go to some effort to ensure that all of the nodes in each cluster that need to talk to each other can do so. For this we need to configure our Kubernetes services so that all the nodes can talk to all f the other nodes that they need to talk to.
+
+Why even use Kubernetes when this would be much simpler with just some VMs? Well, because sometimes you are told to use Kubernetes and that's all there is to it.
+
+## Assumes
+* You have access to one or more Kubernetes Clusters
+* You have Clusters admin access to the k8s Clusters
 
 ## Prerequisites
 
-From here: https://docs.confluent.io/operator/current/co-deploy-cfk.html
+This was developed and tested on Kubernetes Clusters on AWS.
 
-1. Kubernetes local
-2. Helm
+1. Helm
+2. Kubectl
+
+
+## Preparation
+
+1. Prepare two Kubernetes clusters, henceforth referred to as `cluster-0` and `cluster-1`.
+2. Deploy Confluent Platform to `cluster-0` using the Helm charts at https://github.com/confluentinc/cp-helm-charts.
+
+I don't think the Confluent Operator will support what we're trying to do here, so we'll use Helm for the installation instead of the Confluent Operator.
+
+## Process
+
+There are two Kubernetes clusters to work on in parallel - be prepared for some context switching, or multiple, independent shells.
+
+| Step | Cluster-0 | Cluster-1  |
+|------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1    | Deploy the Load Balancer Services                                                                                                                                                                                                                                                                                                                               |                                                                                                                                                                                                                                                                                                           |
+| 2    | Get the External names of the LB Services for each ZooKeeper Node                                                                                                                                                                                                                                                                                               |                                                                                                                                                                                                                                                                                                           |
+| 3    |                                                                                                                                                                                                                                                                                                                                                                 | Update the ExtnernalName resources in the `cluster-1` services yaml file to add the endpoints of the `cluster-0` LoadBalancers                                                                                                                                                                            |
+| 4    |                                                                                                                                                                                                                                                                                                                                                                 | Deploy the Services yaml file                                                                                                                                                                                                                                                                             |
+| 5    |                                                                                                                                                                                                                                                                                                                                                                 | Get the External names of the LB Services for each ZooKeeper Node                                                                                                                                                                                                                                         |
+| 6    | Update the ExternalName resources in the <br>`cluster-0`<br> services yaml file to add the endpoints of the <br>`cluster-1`<br> LoadBalancers                                                                                                                                                                                                                   |                                                                                                                                                                                                                                                                                                           |
+| 7    | Deploy the ExternalName Services to `cluster-0`                                                                                                                                                                                                                                                                                                                 |                                                                                                                                                                                                                                                                                                           |
+| 8    | Update the ZooKeeper Stateful set to replace the zookeeper server string with the service names of the LoadBalancer and ExternalName services.<br>This also applies a Hierarchical Quorum setting to the nodes in `cluster-0`, weighted to essentially ignore the nodes in `cluster-1`<br>Expect a ZooKeeper outage as the rolling restart of the Stateful set  |                                                                                                                                                                                                                                                                                                           |
+| 9    | Check that after the restart the ensemble is working despite three nodes not existing yet.                                                                                                                                                                                                                                                                      |                                                                                                                                                                                                                                                                                                           |
+| 10   |                                                                                                                                                                                                                                                                                                                                                                 | Create the stateful set in `cluster-1` by applying the yaml file. <br>Expect that none of the servers actually serve clients yet because they cannot participate in leader elections. <br>Sending them the 4lw `srvr` should get the response `This ZooKeeper instance is not currently serving requests` |
+| 11   |                                                                                                                                                                                                                                                                                                                                                                 | Monitor the stateful set to ensure it has come up.                                                                                                                                                                                                                                                        |
+| 12   | Update the ZooKeeper Stateful set to set the final zookeeper Hierarchical Quorum settings.<br>Expect an outage while the settings in the two clusters are inconsistent.                                                                                                                                                                                         | Update the ZooKeeper Stateful set to set the final zookeeper Hierarchical Quorum settings.<br>Expect an outage while the settings in the two clusters are inconsistent.                                                                                                                                   |
+| 13   | Zookeeper should now be available on all nodes.                                                                                                                                                                                                                                                                                                                 | Zookeeper should now be available on all nodes.                                                                                                                                                                                                                                                           |
