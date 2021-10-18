@@ -1,4 +1,102 @@
-apiVersion: apps/v1
+#---
+# Source: cp-helm-charts/charts/cp-zookeeper/templates/poddisruptionbudget.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: confluent-cp-zookeeper-pdb
+  namespace: confluent
+  labels:
+    app: cp-zookeeper
+    chart: cp-zookeeper-0.1.0
+    release: confluent
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: cp-zookeeper
+      release: confluent
+  maxUnavailable: 1
+---
+# Source: cp-helm-charts/charts/cp-zookeeper/templates/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: confluent-cp-zookeeper-headless
+  namespace: confluent
+  labels:
+    app: cp-zookeeper
+    chart: cp-zookeeper-0.1.0
+    release: confluent
+    heritage: Helm
+spec:
+  ports:
+    - port: 2888
+      name: server
+    - port: 3888
+      name: leader-election
+  clusterIP: None
+  selector:
+    app: cp-zookeeper
+    release: confluent
+---
+# Source: cp-helm-charts/charts/cp-zookeeper/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: confluent-cp-zookeeper
+  namespace: confluent
+  labels:
+    app: cp-zookeeper
+    chart: cp-zookeeper-0.1.0
+    release: confluent
+    heritage: Helm
+spec:
+  type:
+  ports:
+    - port: 2181
+      name: client
+    - name: metrics
+      port: 5556
+  selector:
+    app: cp-zookeeper
+    release: confluent
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: confluent-cp-zookeeper-jmx-configmap
+  namespace: confluent
+  labels:
+    app: cp-zookeeper
+data:
+  jmx-zookeeper-prometheus.yml: |+
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:5555/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    whitelistObjectNames:
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*,name1=replica.*
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*,name1=replica.*,name2=*
+    - org.apache.ZooKeeperService:name0=ReplicatedServer_id*,name1=replica.*,name2=*,name3=*
+    rules:
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+)><>(\\w+)"
+      name: "cp_zookeeper_$2"
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+)><>(\\w+)"
+      name: "cp_zookeeper_$3"
+      labels:
+        replicaId: "$2"
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+)><>(\\w+)"
+      name: "cp_zookeeper_$4"
+      labels:
+        replicaId: "$2"
+        memberType: "$3"
+    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+), name3=(\\w+)><>(\\w+)"
+      name: "cp_zookeeper_$4_$5"
+      labels:
+        replicaId: "$2"
+        memberType: "$3"
+---apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: confluent-cp-zookeeper
@@ -106,7 +204,7 @@ spec:
         - name: ZOOKEEPER_GROUPS
           value:  "1:2:3;4:5:6"
         - name: ZOOKEEPER_WEIGHTS
-          value: "1;1;1;1;1;1"
+          value: "1;1;1;0;0;0"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID
