@@ -1,5 +1,4 @@
-.DS_Store
+
+**/.DS_Store
 ZookeeperTLS/certs/*
 ZookeeperTLS/keystores/*
-
-Multi-K8s-Stretch/.DS_Store
