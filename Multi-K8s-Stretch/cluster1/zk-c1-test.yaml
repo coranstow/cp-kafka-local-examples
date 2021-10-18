@@ -113,7 +113,7 @@ spec:
         - "bash"
         - "-c"
         - |
-          ZK_FIX_HOST_REGEX="s/${HOSTNAME}\.[^:]*:/0.0.0.0:/g"
+          ZK_FIX_HOST_REGEX="s/zookeeper-$((${HOSTNAME##*-}+3))\.[^:]*:/0.0.0.0:/g"
           ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+4)) \
           ZOOKEEPER_SERVERS=`echo $ZOOKEEPER_SERVERS | sed -e "$ZK_FIX_HOST_REGEX"` \
           /etc/confluent/docker/run
