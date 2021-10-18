@@ -106,7 +106,7 @@ spec:
         - name: ZOOKEEPER_GROUPS
           value:  "1:2:3;4:5:6"
         - name: ZOOKEEPER_WEIGHTS
-          value: "0;0;0;1;1;1"
+          value: "1;1;1;1;1;1"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID
