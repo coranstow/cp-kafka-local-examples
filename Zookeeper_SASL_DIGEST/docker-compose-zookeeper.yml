@@ -1,0 +1,90 @@
+version: "3"
+networks:
+  confluent:
+      name: "confluent"
+services:
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-1
+    container_name: zookeeper-1
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 12181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
+
+      #SASL auth
+      ZOOKEEPER_AUTH_PROVIDER_SASL: "org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml -Djava.security.auth.login.config=/usr/share/jaas/server.jaas
+    ports:
+      - 2181:2181
+      - 12181:12181
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+      - $PWD/keystores:/usr/share/keystores
+      - $PWD/assets/jaas:/usr/share/jaas
+    networks:
+      - confluent
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-2
+    container_name: zookeeper-2
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: 12182
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
+
+
+      #SASL auth
+      ZOOKEEPER_AUTH_PROVIDER_SASL: "org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml -Djava.security.auth.login.config=/usr/share/jaas/server.jaas
+    ports:
+      - 12182:12182
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+      - $PWD/keystores:/usr/share/keystores
+      - $PWD/assets/jaas:/usr/share/jaas
+    networks:
+      - confluent
+  zookeeper-3:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-3
+    container_name: zookeeper-3
+    restart: always
+    environment:
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: 12183
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:22888:23888;zookeeper-3:22888:23888"
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
+
+      #SASL auth
+      ZOOKEEPER_AUTH_PROVIDER_SASL: "org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+
+      # Promethus
+      EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml -Djava.security.auth.login.config=/usr/share/jaas/server.jaas
+    ports:
+      - 12183:12183
+    volumes:
+      - $PWD/assets/prometheus/jmx-exporter:/usr/share/jmx-exporter
+      - $PWD/assets/jolokia:/usr/share/jolokia
+      - $PWD/keystores:/usr/share/keystores
+      - $PWD/assets/jaas:/usr/share/jaas
+    networks:
+      - confluent
