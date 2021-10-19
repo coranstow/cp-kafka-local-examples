@@ -30,6 +30,7 @@ services:
       - $PWD/assets/jolokia:/usr/share/jolokia
       - $PWD/keystores:/usr/share/keystores
       - $PWD/assets/jaas:/usr/share/jaas
+      - $PWD/template/docker:/etc/confluent/docker
     networks:
       - confluent
   zookeeper-2:
@@ -58,6 +59,7 @@ services:
       - $PWD/assets/jolokia:/usr/share/jolokia
       - $PWD/keystores:/usr/share/keystores
       - $PWD/assets/jaas:/usr/share/jaas
+      - $PWD/template/docker:/etc/confluent/docker
     networks:
       - confluent
   zookeeper-3:
@@ -86,5 +88,6 @@ services:
       - $PWD/assets/jolokia:/usr/share/jolokia
       - $PWD/keystores:/usr/share/keystores
       - $PWD/assets/jaas:/usr/share/jaas
+      - $PWD/template/docker:/etc/confluent/docker
     networks:
       - confluent
