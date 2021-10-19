@@ -70,6 +70,12 @@ dataLogDir=/var/lib/zookeeper/log
   'ZOOKEEPER_ADMIN_SERVER_PORT' : 'admin.serverPort',
   'ZOOKEEPER_ADMIN_IDLE_TIMEOUT' : 'admin.idleTimeout',
   'ZOOKEEPER_ADMIN_COMMAND_URL' : 'admin.commandURL'
+  'ZOOKEEPER_QUORUM_AUTH_ENABLESASL': 'quorum.auth.enableSasl',
+  'ZOOKEEPER_QUORUM_AUTH_SERVER_REQUIRE_SASL': 'quorum.auth.serverRequireSasl',
+  'ZOOKEEPER_QUORUM_AUTH_SASL_LOGIN_CONTEXT': 'quorum.auth.learner.saslLoginContext',
+  'ZOOKEEPER_QUORUM_AUTH_SERVER_LOGIN_CONTEXT': 'quorum.auth.server.saslLoginContext',
+  'ZOOKEEPER_QUORUM_CXN_THREADS_SIZE': 'quorum.cnxn.threads.size',
+  'ZOOKEEPER_SESSION_REQUIRE_CLIENT_AUTH': 'zookeeper.sessionRequireClientSASLAuth'
  } -%}
 
 {% for k, property in other_props.items() -%}

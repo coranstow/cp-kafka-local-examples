@@ -19,6 +19,9 @@ services:
 
       #SASL auth
       ZOOKEEPER_AUTH_PROVIDER_SASL: "org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+      ZOOKEEPER_QUORUM_AUTH_ENABLESASL: "true"
+      ZOOKEEPER_QUORUM_AUTH_SERVER_REQUIRE_SASL: "true"
+      ZOOKEEPER_SESSION_REQUIRE_CLIENT_AUTH: "true"
 
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml -Djava.security.auth.login.config=/usr/share/jaas/server.jaas
@@ -50,7 +53,10 @@ services:
 
       #SASL auth
       ZOOKEEPER_AUTH_PROVIDER_SASL: "org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
-      # Promethus
+      ZOOKEEPER_QUORUM_AUTH_ENABLESASL: "true"
+      ZOOKEEPER_QUORUM_AUTH_SERVER_REQUIRE_SASL: "true"
+      ZOOKEEPER_SESSION_REQUIRE_CLIENT_AUTH: "true"
+
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml -Djava.security.auth.login.config=/usr/share/jaas/server.jaas
     ports:
       - 12182:12182
@@ -78,6 +84,9 @@ services:
 
       #SASL auth
       ZOOKEEPER_AUTH_PROVIDER_SASL: "org.apache.zookeeper.server.auth.SASLAuthenticationProvider"
+      ZOOKEEPER_QUORUM_AUTH_ENABLESASL: "true"
+      ZOOKEEPER_QUORUM_AUTH_SERVER_REQUIRE_SASL: "true"
+      ZOOKEEPER_SESSION_REQUIRE_CLIENT_AUTH: "true"
 
       # Promethus
       EXTRA_ARGS: -javaagent:/usr/share/jmx-exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx-exporter/zookeeper.yml -Djava.security.auth.login.config=/usr/share/jaas/server.jaas

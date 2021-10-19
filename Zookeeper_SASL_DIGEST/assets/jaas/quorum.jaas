@@ -1,0 +1,10 @@
+QuorumServer {
+       org.apache.zookeeper.server.auth.DigestLoginModule required
+       user_test="testsecret";
+};
+
+QuorumLearner {
+       org.apache.zookeeper.server.auth.DigestLoginModule required
+       username="test"
+       password="testsecret";
+};
