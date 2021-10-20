@@ -36,7 +36,6 @@ metadata:
   labels:
     app: cp-confluent-platform
 data:
-
   zookeeper-0.crt.pem: |
     -----BEGIN CERTIFICATE-----
     MIIDcjCCAlqgAwIBAgIJAPWG4eigYKScMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
@@ -113,7 +112,7 @@ data:
    6RtkmJWH1TejNg3RxJ7t2YGAE7EXAr40jmrmlB0IOvytQ+uhDbLtqUsOI9Y7AOW8
    8ckIHBcnIpUIYm0QVl+5nLk=
    -----END CERTIFICATE-----
-  zookeeper-0.quorum.key.pem: |  
+  zookeeper-0.quorum.key.pem: |
     Bag Attributes
         friendlyName: zookeeper-0.confluent
         localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 38 36 30 32 35 32
