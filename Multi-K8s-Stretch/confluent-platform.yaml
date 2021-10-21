@@ -6,7 +6,7 @@ metadata:
   namespace: confluent
 spec:
   #type: LoadBalancer
-  type: LoadBalancer
+  type: ClusterIP
   externalTrafficPolicy: Local
   ports:
     - name: client
@@ -35,7 +35,7 @@ metadata:
   name: zookeeper-1
   namespace: confluent
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   externalTrafficPolicy: Local
   ports:
     - name: client
@@ -64,7 +64,7 @@ metadata:
   name: zookeeper-2
   namespace: confluent
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   externalTrafficPolicy: Local
   ports:
     - name: client
