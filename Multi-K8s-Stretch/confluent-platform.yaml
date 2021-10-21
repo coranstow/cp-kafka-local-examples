@@ -1,382 +1,4 @@
----
-# Configmap containing the Root CA for the certificates used here
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: confluent-cp-rootca
-  labels:
-    app: cp-confluent-platform
-data:
-  cp-RootCA.pem: |
-    -----BEGIN CERTIFICATE-----
-    MIIDTjCCAjYCCQC2IbQ1SjpMgTANBgkqhkiG9w0BAQsFADBpMR0wGwYDVQQDDBRl
-    eGFtcGxlLmNvbmZsdWVudC5pbzEQMA4GA1UECwwHZXhhbXBsZTESMBAGA1UECgwJ
-    Q09ORkxVRU5UMRUwEwYDVQQHDAxNb3VudGFpblZpZXcxCzAJBgNVBAYTAlVTMB4X
-    DTIxMTAyMDAyNTk1N1oXDTIyMTAyMDAyNTk1N1owaTEdMBsGA1UEAwwUZXhhbXBs
-    ZS5jb25mbHVlbnQuaW8xEDAOBgNVBAsMB2V4YW1wbGUxEjAQBgNVBAoMCUNPTkZM
-    VUVOVDEVMBMGA1UEBwwMTW91bnRhaW5WaWV3MQswCQYDVQQGEwJVUzCCASIwDQYJ
-    KoZIhvcNAQEBBQADggEPADCCAQoCggEBAN5+C3hHsUNwmP5b7pQ3By60j4a8ELVR
-    zBi+sfOAWbgDAXiFvdX/umVYj2wCu8+Cq0JvdWT1nF2BojTB6SkXrBWius20vkyn
-    bjJ68EznFuVAp2HRBN+JvIMZKzRHDmSA4gmTpIX3WRm7z/RioAuivRFooUDXBZc5
-    Wx58Pp7KlY8o4I0mVZ4CoK0g0iG/LSCBC4Kf8oO9ivHsCNNCYS3ohLk6SSBS9/rY
-    y/giasFZNCehvODK6W1uuf2OdckeMnnJOhBN0QkwFKfsgR+vag/EP7FUerWOIuH6
-    +2RSdKSoD1wRstA9fJXkZJII62hBInAy021zPN3tEUNJ8ZZlp7/HjZUCAwEAATAN
-    BgkqhkiG9w0BAQsFAAOCAQEAMfiUX6PfviVScKafdd0knXdk3Dg+NwjleIsailVc
-    mlMO4vS3CFPaNKuCLNpqy18SthcyFPVJ2K3vPcyvvgNjElueOQYdp6Jt+XIhbldj
-    cwPwROZV9V86D/sI5oFzy3asUaMVDI4hwpBZTgM1B7i8t10dNYoQ0gEX3K3/8yRR
-    xEMxxvsgliTWU8rUoqJVUQ8GbqcJA1YYxJcir1FDvMGK7bIkc1WA0/tThRT50BZy
-    Ufwr78oXe+UYAdGkFITXIFXnL94gegWLwJ/F+R7lWfdafrI7FS8kH8+qD+0tAAVE
-    2jcZolaOo9dD/9Rhd/Rcdj8fBcVUd7X+6R9hw4lcoVFTXg==
-    -----END CERTIFICATE-----
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: confluent-zookeeper-certificates
-  labels:
-    app: cp-confluent-platform
-data:
-  zookeeper-0.crt.pem: |
-    -----BEGIN CERTIFICATE-----
-    MIIDcjCCAlqgAwIBAgIJAPWG4eigYKScMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
-    BAMMFGV4YW1wbGUuY29uZmx1ZW50LmlvMRAwDgYDVQQLDAdleGFtcGxlMRIwEAYD
-    VQQKDAlDT05GTFVFTlQxFTATBgNVBAcMDE1vdW50YWluVmlldzELMAkGA1UEBhMC
-    VVMwHhcNMjExMDIwMDMwMDI2WhcNNDkwMzA2MDMwMDI2WjBVMQswCQYDVQQGEwJV
-    UzELMAkGA1UECBMCQ2ExETAPBgNVBAcTCFBhbG9BbHRvMRIwEAYDVQQKEwlDT05G
-    TFVFTlQxEjAQBgNVBAMMCW1UTFNfVXNlcjCCASIwDQYJKoZIhvcNAQEBBQADggEP
-    ADCCAQoCggEBANKwxoPJMg1IIUTyxuU+mtptF6Zk8GgrxM9Sz9Bbzk3YFJAXigy/
-    Zgtzqydw082gww5q3NN3H5ZQyHFE/s0bAgKKKdtWV7S/tjVMgxq1SS2nE2sgWzhp
-    NFV+O8us9LX07gk17OQe8YmH34DYX2j7i+XGpmQqQknz7yhdgVrT0QAUI9BsyG+3
-    SsYm1mxF0vFRW2TBvllHbIy81Tu4r41e068uONqMVLWy/8QIjK8xAQP9KBFlyluA
-    cDV3RDOlURBqQ9c6euCXzIWqvssZB0voqdv2T7Fud4wONF1cPVvIJKFQVgRRLZ5N
-    F/02OFjffxQa3d/D5Y9dScdmY0dQYDAk4hkCAwEAAaMxMC8wLQYDVR0RBCYwJIIL
-    em9va2VlcGVyLTCCFXpvb2tlZXBlci0wLmNvbmZsdWVudDANBgkqhkiG9w0BAQsF
-    AAOCAQEAabwoFTbA5e6XCeOZeSXVPe5XH21Qc1iFeXL1sEJ0obZfI6qetiV7/uxl
-    9X8vb8bpi+ZicF9vSqssdU3tcH9obbTRZDnD5bSjtxPQrvJMXA82EV3XMx96sdpp
-    YunWdujXwxlBDqZCLHS+BfM6gmut/XAetuPZMus4aPWGdZSIv+pWbeMMasCe3FN9
-    ++s5wd+IZRYoEOsTKu4rqmXQC4aiMaEbxJlB3/xvx3j7v1BH97OkMuIXJOrHSZUJ
-    I0Faq/68Vk30jP/8jDh2STQxgEkIWmg5lW20XkBOe4I+jyBUJOy+k+61NPaZARGB
-    E7xjvHi15c8Fz5p8vXAP1y8xSBuy2g==
-    -----END CERTIFICATE-----
-  zookeeper-0.key.pem: |
-    Bag Attributes
-        friendlyName: zookeeper-0.confluent
-        localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 37 39 39 36 30 38
-    Key Attributes: <No Attributes>
-    -----BEGIN PRIVATE KEY-----
-    MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDSsMaDyTINSCFE
-    8sblPprabRemZPBoK8TPUs/QW85N2BSQF4oMv2YLc6sncNPNoMMOatzTdx+WUMhx
-    RP7NGwICiinbVle0v7Y1TIMatUktpxNrIFs4aTRVfjvLrPS19O4JNezkHvGJh9+A
-    2F9o+4vlxqZkKkJJ8+8oXYFa09EAFCPQbMhvt0rGJtZsRdLxUVtkwb5ZR2yMvNU7
-    uK+NXtOvLjjajFS1sv/ECIyvMQED/SgRZcpbgHA1d0QzpVEQakPXOnrgl8yFqr7L
-    GQdL6Knb9k+xbneMDjRdXD1byCShUFYEUS2eTRf9NjhY338UGt3fw+WPXUnHZmNH
-    UGAwJOIZAgMBAAECggEAAqvpKHyhnNeATH6DlR6RGhnuBdcb0UZUzYgwSGURnZ0S
-    zazuvDClG5oQ3oQou1/BeWpTeH73MJG/qOgGDxW7lcqoszZKEGmp5s0ckHciAWkv
-    7tjPL0zuM/NQ0MlVpQUBC67aXR4jU+ocJGcZ9pvR70zwiS6b/pIQQ0PEQyGScdzJ
-    m1h7OWL4n5hZVgtsE5dZMHRTUbC+ODQfSz0xT6QJjbAwZSgBfzp8ccqz0ooveoUb
-    MJ+4zWofBj5YBHeJDMCesrYEJ5YgXQnMANDBYIWch3aSwwV75rz1KdNUtOHk/ajN
-    QDFSO2vKTsynxMXABuWW2Wx8UdBB8CSZAXfvxbnvzQKBgQD6ld9naY1uyjLLYG1k
-    9Ww/PjOZQL1FIU9IGP8ex0d3FnHU/sQshC4kUERN8KkB5rVt56cHj9ic6iQ60o2t
-    QkmgUq1t4Ld8KpgB8va0pTPKpgv3zpHRlfbawIJLnMUd52QlJeigRQt2CcGJZue4
-    f6LfkJ8/NWjjcMSIlE1TR6WxhwKBgQDXPjjLWKoCoCi+N6ou07dGuVewBvYA7aIT
-    pc9Eu9FfJUqwdbCLAmP+yzYJ/a5/qs8OWOfo9AkJtX4VwpPwHbWaLIh4osE3CzxQ
-    N7U1m56s+TINdbtmvXN9uQp0TIkSkfA5MC1F9SEPv2eR2wLtgS3UGb7CmdqZWnjW
-    DtUTLFw3XwKBgHniTjDZqX57ASvlMjCKI2W7lpNzZtxqMErsRaMt4Pfuxd2JMdhJ
-    TrxBAog6h6oyEotrwtWtxPnF9WtbIKhmdrNxo4OvavANM7S2/gKt3Dw0edvF8S1V
-    WSXbv0SR81rxQsfC4ZybGNEIO8fectVN1+YQTTUMgIEoR5/7KoVYcyKfAoGBAKYc
-    /RPiH4LbO9Zhe1OcTSulyoitNpnMy3LCWk2/bXwyeYvpqBAADlALYG8hetRIbHe0
-    IXZlL7xwdxgwDKAZLZgImmIPqXHjl+6Ir67ppPH1d61vmOtXdpQmhGzwzDCqtGxO
-    RAJjhdpza2jjT0Ugls/D9raUqmIDspHw7HxZlemdAoGAB2zYlRiTowHI0B4zFMpz
-    iNoOz05lShrptV9U3Qmunm4FUPn/MohsW1EWVosRaEWqFHbeSVYs1rMkZMhj3w5Q
-    EmQqyywCnKDA7Kes5msc3LjTvsWKIcWrzwyZ9TBaBDqwjr67bgLYB892SmF9ttBS
-    XCMhSNgRdNGngxyifg/VVfI=
-    -----END PRIVATE KEY-----
-  zookeeper-0.quorum.crt.pem: |
-   -----BEGIN CERTIFICATE-----
-   MIIDPTCCAiWgAwIBAgIJAPWG4eigYKSrMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
-   BAMMFGV4YW1wbGUuY29uZmx1ZW50LmlvMRAwDgYDVQQLDAdleGFtcGxlMRIwEAYD
-   VQQKDAlDT05GTFVFTlQxFTATBgNVBAcMDE1vdW50YWluVmlldzELMAkGA1UEBhMC
-   VVMwHhcNMjExMDIwMDMwMTAxWhcNNDkwMzA2MDMwMTAxWjAgMR4wHAYDVQQDExV6
-   b29rZWVwZXItMC5jb25mbHVlbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
-   AoIBAQCjwh32ZCsRITik7dvrVufnZJXQp4jHEhdEnQ77JJeoBkrwUBhhBO52oqwH
-   MYNwE8WbK93RiZTaDH7Rz9a/wwEnTkeXQlQ0ZnpZGNT7j5ZKbOQrYtCDGHQA8fHW
-   ZUSLxyv1pcvV3Bgl6KboLHGIYIYrMbk7l/zvo1M6K9Yqmz1+94w/s9GqzXsoO8sp
-   WC6TjNR4AgJvDdU/naoUDqp6hwsXRMkr4FNbKu5R5c3SMEmNWF9r6TStuFxiFXoF
-   PU8Fjh1mfE56HI2DAyaf/gxrTijWDoVnnLvZUo1F7A3PiGMyC/bDWSUIKPyb02AX
-   5XWMFZjUJrUdAPYpJoM2NkzvIpR9AgMBAAGjMTAvMC0GA1UdEQQmMCSCC3pvb2tl
-   ZXBlci0wghV6b29rZWVwZXItMC5jb25mbHVlbnQwDQYJKoZIhvcNAQELBQADggEB
-   AB+BFKeuXPKVicnTowEa7Qaczjrwj0em2G2h4tGBMqrNih4pFRJbyHUhHFFDO4JS
-   pQ6qKHN73a+IJ3UuzmQBrBJW2q6IMrJCKRm5bCqZYlmJLnoPgg8QP30BTQA0mQ4X
-   oO360qhuxfiGjHgQPPGh3jqL+x0SxEAOXq0adULtbKqVQKn7IwFmPuVPSP12JTeX
-   PrU5JMiCfGWLFdzYW+7gB1W4Fm7Q4f+l7+VElU2gQdw5W/si2ml6++WxUWBFHati
-   6RtkmJWH1TejNg3RxJ7t2YGAE7EXAr40jmrmlB0IOvytQ+uhDbLtqUsOI9Y7AOW8
-   8ckIHBcnIpUIYm0QVl+5nLk=
-   -----END CERTIFICATE-----
-  zookeeper-0.quorum.key.pem: |
-    Bag Attributes
-        friendlyName: zookeeper-0.confluent
-        localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 38 36 30 32 35 32
-    Key Attributes: <No Attributes>
-    -----BEGIN PRIVATE KEY-----
-    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCjwh32ZCsRITik
-    7dvrVufnZJXQp4jHEhdEnQ77JJeoBkrwUBhhBO52oqwHMYNwE8WbK93RiZTaDH7R
-    z9a/wwEnTkeXQlQ0ZnpZGNT7j5ZKbOQrYtCDGHQA8fHWZUSLxyv1pcvV3Bgl6Kbo
-    LHGIYIYrMbk7l/zvo1M6K9Yqmz1+94w/s9GqzXsoO8spWC6TjNR4AgJvDdU/naoU
-    Dqp6hwsXRMkr4FNbKu5R5c3SMEmNWF9r6TStuFxiFXoFPU8Fjh1mfE56HI2DAyaf
-    /gxrTijWDoVnnLvZUo1F7A3PiGMyC/bDWSUIKPyb02AX5XWMFZjUJrUdAPYpJoM2
-    NkzvIpR9AgMBAAECggEATnHUrIz7XG9PlSIkMS4mVOAILDW0/bea0dFytbentmOd
-    TlTv+LnGCaqPQbrkPbIa/OQclB2V4oYN0i//rUiaqtuCy+CIObnFbhzJGeCEnA5h
-    lq71N3dlSnab5JoKJfM5CalsZXvTTYWPPrTbhfrHCrX9B6EdFyZj3f/Vzf8jjEgB
-    CCuVF2Zw6SXJN5zLrgdroGDRVoYGQtAi2TMc/riZ2/VxUDLWAfBFDSOiznFkssg0
-    qQQEF0XVgoYQ4be7qCkHCr5LbAsrPETRQ89kxwH6CDxQ2ZH5K/Tsq+Bp/jKO4LUU
-    +Juj2k0TB6pslsyS2zXB7AzLoXGEEsjZ8p3xtmumAQKBgQDPBg/Tlow0Z/m3VuiC
-    Qsfr0Uh5TQeaEDws3iO1jjrYfhybULjV2QOfUxnnzD5Kc8hkiH6a4L9J5Rn7JXnh
-    8vKDXq+LML8Rlb4uUAGPBtZpYky9xK5R7uMxkoPiTESUsJsjv534DTi8Ke+8vc8s
-    zE1AFsm2u029I4I3FIOoDF97QQKBgQDKf8eqfP6Fj0sTskqXscPmhDYrkwzDv6Ec
-    2NfwY/mrjnKeX63CZAM1gmc9ojs674LGP+5VqwjrBJPfwBpXTR5Oq00tZ88Y78v+
-    psbQBq+MWtWNuYMpIzi8GIuouiPAQfeN5nOoW24thUTBVXp9Edf+cG22fYN9nVbT
-    CvKnVEK2PQKBgQCiZE7l2qIAOc9YUYPxKhFImdIP1Kyx3SpWx6mbMQZX7BTkgF18
-    4c5FnBomCcCTBl+a/LbTJpjmjh/jMXJ6GujAw/VPad13Hc8g5QFUADkQUVuBQFa9
-    TnZI3HU3fjwNprsLP7PacAShFQRJOVrZ+ShfrYBtJl/EjaYHLsBXgd0kAQKBgQC6
-    LoIF3qalZfpBQcwTbP4RE746khlKYQZg336rJ0CG25HGy3GXKR1KNXt2z5JlvZEf
-    dehMG9U3QB41uwp8+grDifyLosZmxxNoLy7cVUlSYrG2fLp7OEcRqf++QmZcfkp9
-    zUTJpkbG06FDoLPeCmntJrG49+3NsLwDji1Ma8xqgQKBgH2VqC2RhKuNnZlmvIiY
-    4exL+XAOW1iZZEBw2y2U1ENfsH3iGHVjuxM6/Z6PNGnZhEe4EVC7Mb1deNFfDk3K
-    bNIjjzx5ksqyJha/F7gMSij14Jdu5wL9rTeAV+wgKOgrVUC2hKnKaoS4ft5JtKiX
-    Z5bJrgHPR5/0tSfkIksX3V/b
-    -----END PRIVATE KEY-----
-  zookeeper-1.crt.pem: |
-    -----BEGIN CERTIFICATE-----
-    MIIDcjCCAlqgAwIBAgIJAPWG4eigYKSdMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
-    BAMMFGV4YW1wbGUuY29uZmx1ZW50LmlvMRAwDgYDVQQLDAdleGFtcGxlMRIwEAYD
-    VQQKDAlDT05GTFVFTlQxFTATBgNVBAcMDE1vdW50YWluVmlldzELMAkGA1UEBhMC
-    VVMwHhcNMjExMDIwMDMwMDI2WhcNNDkwMzA2MDMwMDI2WjBVMQswCQYDVQQGEwJV
-    UzELMAkGA1UECBMCQ2ExETAPBgNVBAcTCFBhbG9BbHRvMRIwEAYDVQQKEwlDT05G
-    TFVFTlQxEjAQBgNVBAMMCW1UTFNfVXNlcjCCASIwDQYJKoZIhvcNAQEBBQADggEP
-    ADCCAQoCggEBAKwv9C3jhElN9hPEoA5OddwZG2IfVq5aqATv2X2g05f5xsrkLT9N
-    iRSl7MnrI7EbiTIICbVSaHqtAB0YGpIsJCxeAM0XhEsMvP8ZxVkWwcKyvYKpVUV3
-    4TfsQQUT91X86j7IYlCtGPiijiT+xnINVylrKCKQSqvB822llJh/WmZDDXBamYSI
-    +Q1OKs905+Pr6sui0UsqXb/3RPzN1wSXBu4WQ9INuO/stBxvHNetxs6/EN2s86y1
-    2gnP207+Mrw1+vJO+4DzAeV0ZYtg15nHs+MDzcy/oCkwXs8DBBoxwOtjxn5gsJmy
-    T2f+i02Si/jhFkerBXi28VesHbMZDa9he4MCAwEAAaMxMC8wLQYDVR0RBCYwJIIL
-    em9va2VlcGVyLTGCFXpvb2tlZXBlci0xLmNvbmZsdWVudDANBgkqhkiG9w0BAQsF
-    AAOCAQEAmMQ4OU6Wt5RKGCXRuFM1IODGCC35fdFIYvBG2zfst6DjhaE06YZ56QCY
-    1UJfw5+uu6pTLaH90v3ihlxJlWxm1hMv1jPdOGN3zuPd4hNG8d2atvK+C5BafCgW
-    LD4S8J5Y4von8nXR3IKINFIpVfeIq5zmLv5LxRMBQ0vI3h3KeQGpUcICubrRYlGd
-    9Y/+DYTVSffCsOvEf4hhGg50ita6z5EGwmO027FCX0y09Mb7f5BjxBeWFzBIuOno
-    bJZV08OA3qbaq0Jg9jsx9wg5Ow3gEb5tphBipZF++72ls3GnKTpz1PKZscBysaVx
-    8xMKUCvf9H0N6chLp4sJKhSX0e/gpw==
-    -----END CERTIFICATE-----
-  zookeeper-1.key.pem: |
-    Bag Attributes
-        friendlyName: zookeeper-1.confluent
-        localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 38 30 31 34 33 30
-    Key Attributes: <No Attributes>
-    -----BEGIN PRIVATE KEY-----
-    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCsL/Qt44RJTfYT
-    xKAOTnXcGRtiH1auWqgE79l9oNOX+cbK5C0/TYkUpezJ6yOxG4kyCAm1Umh6rQAd
-    GBqSLCQsXgDNF4RLDLz/GcVZFsHCsr2CqVVFd+E37EEFE/dV/Oo+yGJQrRj4oo4k
-    /sZyDVcpaygikEqrwfNtpZSYf1pmQw1wWpmEiPkNTirPdOfj6+rLotFLKl2/90T8
-    zdcElwbuFkPSDbjv7LQcbxzXrcbOvxDdrPOstdoJz9tO/jK8NfryTvuA8wHldGWL
-    YNeZx7PjA83Mv6ApMF7PAwQaMcDrY8Z+YLCZsk9n/otNkov44RZHqwV4tvFXrB2z
-    GQ2vYXuDAgMBAAECggEAJlaHB7Cgw7GYGM6u1ICjvV3Zuv8/TZLh1jeRNWeZtTzo
-    BkTHzlB1NSO8lTjFualn4rvnbXfry2S5ocC8Kc+qPjav9vpFenBbpHEYf72RZshl
-    abJKSi1m+AyibX8EkyC9Bz2Wpl/kL3gCLjqL9NkDjzVMumVmOtf0W3WCoHG6rwnf
-    n3d65Fmv5Xsl8oEYUKwhNk08ABnvx3psNuTgtjJEyY+HRjzILulHZBnaD1CwEBMn
-    dBF9HlKMm/v+s4fCCLT34qg91nkTpRvf8i9dZkJ3gXUsVwFXO/Hzb9L2P8rexlTt
-    LwAD56mLXhF/a+sD+AKPQI0NzdyoHHWaCB7AJ4AQAQKBgQD/5IYn5IPzuyDtyHWx
-    YP4O5iRKmA7xmOgUD3yATMFiTPgjxYSP4xhlgZEwiQWmf9aYtUxQdVGmOiabtNUh
-    yBvRQJkrNTDFBPrmbAa2zFmwp5b7vplugW1LASiuEr2mNccC2V2F8ETZRsf3OyLn
-    eUfiaXJbagHuvX0Iy1Up01aQywKBgQCsQnEspUXJ06rK0qmwlfBaK2qOU0ieF7jz
-    biQDJ8hB5UCjCRigbIXhdTsl+JLNxL8S+ndahJcZK5SR2yt+syMiivicq1tSza0O
-    mFi7XtXpVrYfULdZAE15YxLuZt9bh8sEstDevNc7nDcvEJGcBjiDiGQzsMTnxpMt
-    paVt2uqBKQKBgQDg3Poe2Coz5b679SmnI6pdgVNm0VRgbZOS/UDUpZ5SOXzcQleI
-    8XCg0ki5s87pTvFO5BIZqd6EChmfPjsEIop/SRrP4z/mAchQ76C+xbgTClIdCpJd
-    jxJxlKUgwosxIZSuJkCO0GJP5GkYEjlL20GV7j91oSPtnUngjn1Z8cLiHQKBgHCi
-    MSYkGvHQ+UgNXu8b20DaSp4tTrowgLqLNfjqNkMAB7eS5wtealv1L2uwkS0CjH14
-    UDpboADRQh/s0w/RShP4En8+fEQ0QAffDYXWiMA99m+bc4c6b24DnglMMpfCvrif
-    w3sgtws/JcYca1k9qA45TGuQFfAHI40hVn3yOouhAoGBAMqaKQfuzAaAzoSSL6v6
-    y9nBvW5CVUUJw2lBBj7ZB5hMiIC2hI0I+q210NmcDzXgXpt/HHv+wV1fgzAeWNgQ
-    O2UZ/4TcL499wvun6wIDUTE/W/DYD9oEfCCq9AM1BPFUSWFGJGssdoIouL+/kf4P
-    PTlxxpKyJWIo9AKbAs3EPZ4I
-    -----END PRIVATE KEY-----
-  zookeeper-1.quorum.crt.pem: |
-    -----BEGIN CERTIFICATE-----
-    MIIDPTCCAiWgAwIBAgIJAPWG4eigYKSsMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
-    BAMMFGV4YW1wbGUuY29uZmx1ZW50LmlvMRAwDgYDVQQLDAdleGFtcGxlMRIwEAYD
-    VQQKDAlDT05GTFVFTlQxFTATBgNVBAcMDE1vdW50YWluVmlldzELMAkGA1UEBhMC
-    VVMwHhcNMjExMDIwMDMwMTA1WhcNNDkwMzA2MDMwMTA1WjAgMR4wHAYDVQQDExV6
-    b29rZWVwZXItMS5jb25mbHVlbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
-    AoIBAQCtal/G8bQxtcRwOWyHlI/MEixbKtomRZxApYdjB+vPJL20NAPLNA3agCbz
-    AzFhHh1LksSi5ned9bhh1A8d6sxUaoZCyT8s16uRU9Uq80Q/wBpzBgWqy1w4pu3Q
-    LqW1hIqaO5JU4kuZZNn0reoFlhWPFn0Cq58VbjzscdX/3KSr0l/f0oXk/pCimnKZ
-    AhnA1GaqubpSEdBxMfzH6ogI8D5BGM9Z8Gbyu7E8vzy71Y6Jsa7LUiL/qo/WBlqg
-    sryaJVaZ3pCE9/7WfSX5KL9ZCwHpcU0GtqABbOajy0KXQIhq0DQLfGXomSX4VFuu
-    EfFn5uVuqTcp7/Gk5xygcT+Xl0VpAgMBAAGjMTAvMC0GA1UdEQQmMCSCC3pvb2tl
-    ZXBlci0xghV6b29rZWVwZXItMS5jb25mbHVlbnQwDQYJKoZIhvcNAQELBQADggEB
-    AKf/KuGCOU5EbtSlJ1uyqUMRW+mP69hqy7/tidTlFF4q62ZKosXA30A8Bishhx+3
-    Z0R2fiVH3dHMMY9QROeTOs1uorLyhjwpFTWr2oWVK4mSLttmHcMHml+qZSeN0QdO
-    OJzbcIfNewfrZdTIpoBCgqrDZSTIqM00nyIh5FQbcvOGeRdBxBEnKIE5tywh4lGs
-    5vpl/YW5n1epiUcP74+qSVyBr+2d+kI7ak0Dw4KhvtAlOH2F7t78MQDyiFy15KYu
-    BtqgVGXz39grOxulB/dEgYdopu06UlgFXGE29zKIqlT3A+K2neSO4mXu4FHxP2pp
-    De94vn7lZl2XrGygTrXPWhk=
-    -----END CERTIFICATE-----
-  zookeeper-1.quorum.key.pem: |
-    Bag Attributes
-        friendlyName: zookeeper-1.confluent
-        localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 38 36 34 34 30 32
-    Key Attributes: <No Attributes>
-    -----BEGIN PRIVATE KEY-----
-    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCtal/G8bQxtcRw
-    OWyHlI/MEixbKtomRZxApYdjB+vPJL20NAPLNA3agCbzAzFhHh1LksSi5ned9bhh
-    1A8d6sxUaoZCyT8s16uRU9Uq80Q/wBpzBgWqy1w4pu3QLqW1hIqaO5JU4kuZZNn0
-    reoFlhWPFn0Cq58VbjzscdX/3KSr0l/f0oXk/pCimnKZAhnA1GaqubpSEdBxMfzH
-    6ogI8D5BGM9Z8Gbyu7E8vzy71Y6Jsa7LUiL/qo/WBlqgsryaJVaZ3pCE9/7WfSX5
-    KL9ZCwHpcU0GtqABbOajy0KXQIhq0DQLfGXomSX4VFuuEfFn5uVuqTcp7/Gk5xyg
-    cT+Xl0VpAgMBAAECggEAGdFVcwv3FNOH7GFQPBstEWe/PM9zbPE+Iw3By0eZntxM
-    dfCsg+s7CMW9hr558oiGOgMezVXchyLXEZF9sqmLRCIb3QOTKTzuqRM/EEbpaUhT
-    Z76Ex3nBQBnyG+Vl/FFARVgLICIUuUCfhmMCDVTb3tKtR+F/LLSd02HbR111ErNf
-    lbMi+X8lSM05J00t0z6MGqF/wFuynv3T9ThmtHaX15434zDU5T0EAVVdnH3RZrt5
-    0bvNU8x8YFG6PAh3sPc7Bc8SOlS8q68wYu0xV0GI7WxBWiNNXQxG/8IXLC1Hgo4E
-    SRNZ4gdgXoFkVq/KxBNjO8L2Cm2l9MOMM5PpSik9UQKBgQDaTdGWmbT9GPARv2m3
-    1DoDEyQzvFiaEgeb6q4NjTqEJBUVCHiwlALo6q+Gv5Jvcrv05uw14fQorvkdjXYu
-    IXVSLSy+DDHxZ6oZpdpi2vhqqm81UPvzaGD2NPglN6vJrY+DZ3+zuFPX22BPb9dj
-    3yjjeJeWnlEmJWNtUmx/wcHW7QKBgQDLXEALbi4jN1GXb8U4Hd4SpQB8fLURQPRN
-    1zfqQkSb2xqsI6NRJMPtVSXN6vXax2JwrxEtYeHz5WBYPMCQo0XwZ39C6ltljcnW
-    Pyqr0rfh+MqolVxxImIuTNg7nkboCqPEa9klLYkDjIxIRcgecp6yuEY2YMGaImkH
-    P/PG8Zr87QKBgQC1sIjcsAcbk3LTQp1pW2ABCSBbUsnnSVQ9519/deia7DEDtW5F
-    gJq/Yfw+yRjGWxamKL+1xN5iMeayOvd+Q2iSwXh4oEu84IuJFymglyCkHj+6fzGD
-    D3+LyuAwkZoPm71TH4QAf0yA3lvVIX+B5szwLYD04cUmW33aEfythAShrQKBgDhM
-    8e44Ms3NIumqKA/BNRo0VE4iuH5uXTSvwOs6LYR4xImj1DNC2nt6d1zrD+XiDX7k
-    +Px3fPbpKiNDroxcp6BHBxSfjW4wMxD9q/KmBAKrvm+t6knoGwZ2f+cBit/zEiPv
-    N87zLFuvLadUqnLDiOwx2D51yyPBIxK+wd7yRNaBAoGBAJqhruFhGHakWJQC71jF
-    Sw0tL53WN6RTuUEuFTPiGfb6zuJKHHEMz9NW+KiCRsPGSRB8DHxOUZmh2aJodmtw
-    0H3ylqvrCqveO2/ogCVW1xLtOn9YAi5bpx4qSvXBfVae9HWXhXjvQu9HQkHmUklf
-    ts3Le4lV/Jgz8DZOaNBK6cPW
-    -----END PRIVATE KEY-----
-  zookeeper-2.key.pem: |
-    Bag Attributes
-        friendlyName: zookeeper-2.confluent
-        localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 38 30 33 32 31 39
-    Key Attributes: <No Attributes>
-    -----BEGIN PRIVATE KEY-----
-    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCGhW8icZQ1H/2/
-    M3OmVYkHmInHwP8+j2vHVAgGgdx1//5PtcKy7SPuMaJNBQBWC6r4wsB60N9Z9QQw
-    rkWAPG4rCimb6CamCzKGtjjOYYvxZM304AEEJT2Ceb5PIgkmq0nx5t8QrbXw70+9
-    RKh3NI/rZYhbeWAfkaLQqZ4UhvU5OpLx+iJIxU5Gw32vWF5w9NDDL2jhfd0uung4
-    nx+pT2jw8iIlNLACz5kmtEaw7ZQBDsUB/Sk4uuoINQwWQXIdc7w4QYkG3tBXv4O0
-    xlVK6vvinHIfPez2X7jSTDysJnw07hKaAE1iuQ4ZzrAz5iXvCEWNDVhPlF2oFdqF
-    HkbGQI43AgMBAAECggEBAIQeo7NRmD3BKOhUcV7Jnac/Mvtk24wnMrT4HFW/z7Z5
-    cd3557ryXBrC1uQMaHMaTJa8OG2nneZtVes2Dn7PW2icN5evn93vG3XhnNNeTSMO
-    XZYHOBhJNythxP9Vr2UyUJLsrONlqU90y31Z5JgHoN6SvyUQhc8bq6yDGwaQMmM8
-    bPMgW/uqJSreyZUFU0NkacXJkp2FcHfjycH+197CRWThTw49wHa5St1OuiONoNZA
-    Pfnar9Z2b1byxIZ9OFu7+MK5hWFrdv/WuNI1c8VBBCvETW4MWHI+XMEG+Vm+lE9d
-    ucZeT2P4XNXfbrWvygrXWkABns7T5fauvIfevFj/cdECgYEAzLr1Q+f0wi2c7VRW
-    91+rlWgrHsNJHdS9HoUKqhFIxvWd97cmsEKOefk2R03BLvYwwWWcEtwWWUNAOl1X
-    7DxRwIMKF+J9Ly6BUwRKbLUHaNaf4f3zHvdEPPj2Q5n1NIRb9Snj/p0i64aVGv9Z
-    5Uk/Ib/CuyGbaHEaCInAL51lBh8CgYEAqDVyYVfUY9AtYgq11bXO1D/+jIA+X1Ab
-    +edYPLrCF9lokanphn4QG8ZabohtwBfC0CxmE3MySBm827VBEtLJI4NJJ+0bYPK3
-    euNgBkbDeAPDiox0YFXCXOOR+rTxiY9qrz3QjRPRn2oOUhHcW7bANvRkSp6FMMhq
-    N+QeqlEahOkCgYEAyBqUT2MQYBqlH3Mn7XGdC9NdEhxeAsJEduginEd4kr7PP6fM
-    MMtc5usmmlrtTzFiRiVCf0yOq4CH7oP9w/DRFxD9dIrzQIJ79OBkvgvSyi285+6H
-    CuUz1UShr0Fz4XjdSKtBJUQBNaO9aT3cZ7dH9XywoKcgdtzVTTMWnXOBopECgYBt
-    fKyA1Ax5E64WnOYSvw5rdWQYy/jNTXWISp9SmDVyFJ9OAQzx7+hIS+nc/IyDdnPl
-    0KB4lIjsCWS2ldpPiEhIB1J83Ibvqczn/kwoibL90WVcL2QouGmU0MPaLiDx6xoE
-    CvZOfdH6M6wym1GVmPSwUI9fSqNjR3BsBN44+iWK0QKBgEsdjrB/SPg/VHLDirLN
-    FJDPCVw1JgCnlzPG/Vtx8lbdIBOmp7Km2Hq1jW7tj4oNhxAMJjDGip72CoqVuCi5
-    /ykCEhNTfkKjt0DLtDybXh50Gh7mFt5KNtwi2DgdDWKd/hp7iiLyT31237fy+fFQ
-    aSbRa851xVlR1pd1/U3L74Ge
-    -----END PRIVATE KEY-----
-  zookeeper-2.crt.pem: |
-    -----BEGIN CERTIFICATE-----
-    MIIDcjCCAlqgAwIBAgIJAPWG4eigYKSeMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
-    BAMMFGV4YW1wbGUuY29uZmx1ZW50LmlvMRAwDgYDVQQLDAdleGFtcGxlMRIwEAYD
-    VQQKDAlDT05GTFVFTlQxFTATBgNVBAcMDE1vdW50YWluVmlldzELMAkGA1UEBhMC
-    VVMwHhcNMjExMDIwMDMwMDI2WhcNNDkwMzA2MDMwMDI2WjBVMQswCQYDVQQGEwJV
-    UzELMAkGA1UECBMCQ2ExETAPBgNVBAcTCFBhbG9BbHRvMRIwEAYDVQQKEwlDT05G
-    TFVFTlQxEjAQBgNVBAMMCW1UTFNfVXNlcjCCASIwDQYJKoZIhvcNAQEBBQADggEP
-    ADCCAQoCggEBAIaFbyJxlDUf/b8zc6ZViQeYicfA/z6Pa8dUCAaB3HX//k+1wrLt
-    I+4xok0FAFYLqvjCwHrQ31n1BDCuRYA8bisKKZvoJqYLMoa2OM5hi/FkzfTgAQQl
-    PYJ5vk8iCSarSfHm3xCttfDvT71EqHc0j+tliFt5YB+RotCpnhSG9Tk6kvH6IkjF
-    TkbDfa9YXnD00MMvaOF93S66eDifH6lPaPDyIiU0sALPmSa0RrDtlAEOxQH9KTi6
-    6gg1DBZBch1zvDhBiQbe0Fe/g7TGVUrq++Kcch897PZfuNJMPKwmfDTuEpoATWK5
-    DhnOsDPmJe8IRY0NWE+UXagV2oUeRsZAjjcCAwEAAaMxMC8wLQYDVR0RBCYwJIIL
-    em9va2VlcGVyLTKCFXpvb2tlZXBlci0yLmNvbmZsdWVudDANBgkqhkiG9w0BAQsF
-    AAOCAQEAfnJXGyhkRyX/1TOF1qJ5Ph+rb1Dmg6Y1yiBkgxBYq7qb4h0qXcVQgzi4
-    Lx7H1Px6FP7SymB3X7od5mJA1McEFPug5cfr36yCfd12tdEsg4dd9S+KSWoh6Bqd
-    WE2DpSfMpDrBIoENLgkrPIy5KK6fQg6vquB/ghge22T9YytU50C7pP8+t5HkLf1d
-    BNy3Tw+4Bc+71mNB2FxyU2BpBB7YpzZg+y3O+M6H/sWDEXkFDZK1m1PsvjxFwNIA
-    WXe8FO6VqzF00eISJ/iDIUWVdP2Tq6y1IDqOAPJteoi9ZxHoiK75WeQ8Ichl0fE2
-    ABKjyJkEn5egT7H/AFMPzStcobfxeA==
-    -----END CERTIFICATE-----
-  zookeeper-2.quorum.key.pem: |
-    Bag Attributes
-        friendlyName: zookeeper-2.confluent
-        localKeyID: 54 69 6D 65 20 31 36 33 34 36 39 38 38 36 38 34 34 35
-    Key Attributes: <No Attributes>
-    -----BEGIN PRIVATE KEY-----
-    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDHTOjc3eXf9Pu8
-    qNEDJ8DJTsdgdmVvshbZr9MMLXqH99jxGET5lRCenYoCcnXs2qhiAA5NlbIozqSZ
-    c9in8mbb3UMEFJi/AdlNTaTJN8pciY9I7gBgsxlHS5e39cpHVoDo/O9VWQSNWCNi
-    ORsyKe4uOwUU37thbGVonEAPwHVI16YtH/pJMv+A4VpGBN9Vee0svJMbGoZVXfOH
-    yKdYjMCXvZzTTsZbKxzCKWmbV5hvuJNPlF5oesZgog6nbeDOYnQZ93bzeMpyyKvE
-    W6YJRkPxkmsVDQnSQO6UZnSH0oou/ksm1L6MDGYvd9nZ+XLYT5mO2bPAUKZHHAVQ
-    x6bIcylLAgMBAAECggEALyXysM2N5D2AkFEfoS92XClW4Wsg9BudbEI8G1Vm92Oa
-    3u5u4txw4hVC4PFTFIVl8EkzGQeg7iZ0qhjN2G1wB/OANyboO8ekMLV9llysctfY
-    HdiwHjBAeq1XZx2ujNHaDURJGlfEy+td846u8F8bCbTMrvN+0L1kACt2vEM7e8+d
-    MSZt85KlSW+RaoXFfJJuf9tchkAwCKc7aBRQh6hVm8/7/DRrK7yFx7pDI3E/3P/Y
-    nnMBe+VSz18FpwyiNlisUBS9RqVN0Ia1uBKCQvh8KzS4aDecUNZQzrWofsh77mw2
-    R1hWmHA7XaQ0R/nsP1THQyBXHtM4qV1po3IzJ8dGAQKBgQD1lptuw3LlBYjtm9LC
-    SGMHn5vCIYZY48fXp/Ko2pfmTo50lZKdygOIYKsloT/m31Hje9/y5UqO939IekXw
-    2kErKl6WR6qymH1mCOySSE+O3B49iA8g6Q9bLUZJAb5FnZXAs06FCtIsDo/vvz4z
-    0OPMTIJdRHHSYkv0f36M2vAOcQKBgQDPv++Ohw++FH7RJ5E4wJuZ9IceF3yPk4wA
-    rJZyRhDm5gVJU+uXQpAse+lY4sV52VKD/+WPdd3Pgazcy+V5BNvCUZgg8gl2Vh/X
-    lch3hu29NnZ++MfwsnaAj/fk6WX9YwppXml2QXHoh2svYp7ofHC2aIXuJIRZ5PoF
-    tRYA7d5JewKBgQCTraH/5BXF9CMXxrjgzUiHgAnYnfI8p5Q3cS2xLelju19cackF
-    i0G+k2q3MRTNDwMeCRJs7EZ+XAO1IJnIMGY5v7urIKNby+i0H6+qc0MsA99HXvbB
-    8oOib0IxipPRJuazPt97jzs89PDG2ThdTkJ9SpCl5w+O1D8aYkRGDS2HcQKBgG9y
-    QnuOHrbUXderxy7PvGlRkS5mYQ7QkxlFfIue5LBJEursVwTU02zZqCtjs5YTLD3d
-    h/N2wl/v66CizN4n6hALH3YFAWh2+Sv4kQr12hFX5ydkJDYONp3vHYeyYWEVwV8X
-    I7Ipl4arJqfL2v1SzFA+MCK5ejqTKEDpjP1Ana+DAoGBAOusTgxTHobV80nxJw+4
-    tdiei3Fhm9CF3azy7K3ReCyJ7Jnar1Wx0cZF5h6tfSCy9ZbrBIwmS2biyJ3eCo7Y
-    0kmTKdRF+ACaCubWakXTyjTQ8XRmzad/zWWJ3ncLWEH720IgEUP/+OL2mE1KswRT
-    ojHyYsLm8OwtLqlEdA52fqct
-    -----END PRIVATE KEY-----
-  zookeeper-2.quorum.crt.pem: |
-    -----BEGIN CERTIFICATE-----
-    MIIDPTCCAiWgAwIBAgIJAPWG4eigYKStMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
-    BAMMFGV4YW1wbGUuY29uZmx1ZW50LmlvMRAwDgYDVQQLDAdleGFtcGxlMRIwEAYD
-    VQQKDAlDT05GTFVFTlQxFTATBgNVBAcMDE1vdW50YWluVmlldzELMAkGA1UEBhMC
-    VVMwHhcNMjExMDIwMDMwMTA5WhcNNDkwMzA2MDMwMTA5WjAgMR4wHAYDVQQDExV6
-    b29rZWVwZXItMi5jb25mbHVlbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
-    AoIBAQDHTOjc3eXf9Pu8qNEDJ8DJTsdgdmVvshbZr9MMLXqH99jxGET5lRCenYoC
-    cnXs2qhiAA5NlbIozqSZc9in8mbb3UMEFJi/AdlNTaTJN8pciY9I7gBgsxlHS5e3
-    9cpHVoDo/O9VWQSNWCNiORsyKe4uOwUU37thbGVonEAPwHVI16YtH/pJMv+A4VpG
-    BN9Vee0svJMbGoZVXfOHyKdYjMCXvZzTTsZbKxzCKWmbV5hvuJNPlF5oesZgog6n
-    beDOYnQZ93bzeMpyyKvEW6YJRkPxkmsVDQnSQO6UZnSH0oou/ksm1L6MDGYvd9nZ
-    +XLYT5mO2bPAUKZHHAVQx6bIcylLAgMBAAGjMTAvMC0GA1UdEQQmMCSCC3pvb2tl
-    ZXBlci0yghV6b29rZWVwZXItMi5jb25mbHVlbnQwDQYJKoZIhvcNAQELBQADggEB
-    AHov7H0lyrjf93H32piKAJKfet0ud+AU1Y/uFm9NmJXnbB5uXfyUzmg/g2h5Jhlh
-    rB8ie0aseqvs5iEnWH9anGOUAyvGKBwHiLc0biy1fmLpowbL9rUYOAqZUv0QjfFH
-    kadtT3GQd1Kzvx6OaaitUtK9MDa2tKhQC5MPOetGVUCIRcw8jLVOy/vWCxU+P9K9
-    QJM2GCuxSaujMehdnOx8aCi7fXhN1ycxpVaBJPNZWArh7iDQTsHTAelkzvyclNQn
-    Jd8+US3u8PTiGrskZZKnwHmKICrvxQH4rW05D4X+Oitt+VRBAce00/RBflerlIfT
-    sXM2sApHktjaJ2nVgvY0rDU=
-    -----END CERTIFICATE-----
-
-#  zookeeper-3.key.pem: |
-#  zookeeper-3.crt.pem: |
-#  zookeeper-3.quorum.key.pem: |
-#  zookeeper-3.quorum.crt.pem: |
-#  zookeeper-4.key.pem: |
-#  zookeeper-4.crt.pem: |
-#  zookeeper-4.quorum.key.pem: |
-#  zookeeper-4.quorum.crt.pem: |
-#  zookeeper-5.key.pem: |
-#  zookeeper-5.crt.pem: |
-#  zookeeper-5.quorum.key.pem: |
-#  zookeeper-5.quorum.crt.pem: |
----
+#Service for the internal and external nodes
 apiVersion: v1
 kind: Service
 metadata:
@@ -544,15 +166,15 @@ spec:
         image: "confluentinc/cp-zookeeper:6.1.0"
         env:
         - name: rootca
-          value: /etc/ssl/certs/confluent/rootca/cp-RootCA.pem
+          value: /etc/ssl/certs/confluent/cp-RootCA.pem
         - name: server-key
-          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem
+          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.key.pem
         - name: server-cert
-          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.crt.pem
+          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.crt.pem
         - name: quorum-key
-          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.quorum.key.pem
+          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.quorum.key.pem
         - name: quorum-cert
-          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.quorum.crt.pem
+          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.quorum.crt.pem
         - name: truststore_jks
           value: /var/run/secrets/confluent.io/keystores/truststore.jks
         - name: keystore_jks
@@ -563,29 +185,28 @@ spec:
           value: truststorepass
         command:
         - "bash"
-        - "-c"
+        - "-cx"
         - |
-          #echo "ls /etc/ssl/certs/confluent/zookeeper/" ; ls /etc/ssl/certs/confluent/zookeeper/;
-          #echo "ls /var/run/secrets/confluent.io/keystores/"; ls /var/run/secrets/confluent.io/keystores/ ;
-          #echo "dump the keystore at $keystore_jks" &&
-          #keytool -list -v -keystore $keystore_jks ;
-          #echo "keytool -noprompt -import -keystore $keystore_jks -alias CARoot" &&
-          #keytool -noprompt -import -keystore $keystore_jks -alias CARoot -file $rootca -storepass $keystorepass -keypass $keystorepass ;
-          echo cat /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.crt.pem $rootca > /var/run/secrets/confluent.io/keystores/server.pem ;
-          cat /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.crt.pem $rootca > /var/run/secrets/confluent.io/keystores/server.pem ;
-          echo openssl pkcs12 -export -in /var/run/secrets/confluent.io/keystores/server.pem -inkey /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem -name ${HOSTNAME} -out /var/run/secrets/confluent.io/keystores/server.p12 -password pass:keystorepass ;
-          openssl pkcs12 -export -in /var/run/secrets/confluent.io/keystores/server.pem -inkey /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem -name ${HOSTNAME} -out /var/run/secrets/confluent.io/keystores/server.p12 -password pass:$keystorepass ;
-          echo keytool -importkeystore -srckeystore /var/run/secrets/confluent.io/keystores/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME};
-          keytool -importkeystore -srckeystore /var/run/secrets/confluent.io/keystores/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass;
-          #echo "keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file $server-key" &&
-          #keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file zookeeper-${HOSTNAME##*-}.key.pem -storepass $keystorepass -keypass $keystorepass ;
-          #echo "keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert" &&
-          #keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass
+#         echo "ls /etc/ssl/certs/confluent/zookeeper/" ; ls /etc/ssl/certs/confluent/zookeeper/;
+#         echo "ls /var/run/secrets/confluent.io/keystores/"; ls /var/run/secrets/confluent.io/keystores/ ;
+#         echo "dump the keystore at $keystore_jks" &&
+#         keytool -list -v -keystore $keystore_jks ;
+#         echo "keytool -noprompt -import -keystore $keystore_jks -alias CARoot" &&
+#         keytool -noprompt -import -keystore $keystore_jks -alias CARoot -file $rootca -storepass $keystorepass -keypass $keystorepass ;
+
+          export SERVER_CERT=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.crt.pem ;
+          export SERVER_KEY=/etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem
+          cat $SERVER_CERT $rootca > /etc/ssl/certs/confluent/fullchain.pem ;
+          openssl pkcs12 -export -in /etc/ssl/certs/confluent/fullchain.pem -inkey $SERVER_KEY -name ${HOSTNAME} -out /etc/ssl/certs/confluent/server.p12 -password pass:$keystorepass ;
+          keytool -importkeystore -srckeystore /etc/ssl/certs/confluent/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass;
+          keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass
+#         echo "keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file $server-key" &&
+#         keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file zookeeper-${HOSTNAME##*-}.key.pem -storepass $keystorepass -keypass $keystorepass ;
+#         echo "keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert" &&
+#         keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass
         volumeMounts:
-        - name: confluent-cp-rootca
-          mountPath: /etc/ssl/certs/confluent/rootca
-        - name: confluent-zookeeper-certificates
-          mountPath: /etc/ssl/certs/confluent/zookeeper
+        - name: confluent-platform-certificates
+          mountPath: /etc/ssl/certs/confluent
         - name: keystore-volume
           mountPath: /var/run/secrets/confluent.io/keystores
 #        - name: service-certs
@@ -663,10 +284,8 @@ spec:
           ZOOKEEPER_SERVERS=`echo $ZOOKEEPER_SERVERS | sed -e "$ZK_FIX_HOST_REGEX"` \
           /etc/confluent/docker/run
         volumeMounts:
-        - name: confluent-cp-rootca
-          mountPath: /etc/ssl/certs/confluent/rootca
-        - name: confluent-zookeeper-certificates
-          mountPath: /etc/ssl/certs/confluent/zookeeper
+        - name: confluent-platform-certificates
+          mountPath: /etc/ssl/certs/confluent/
         - name: keystore-volume
           mountPath: /var/run/secrets/confluent.io/keystores
         - name: datadir
@@ -680,12 +299,9 @@ spec:
       - name: keystore-volume
         emptyDir:
           medium: Memory
-      - name: confluent-cp-rootca
+      - name: confluent-platform-certificates
         configMap:
-          name: confluent-cp-rootca
-      - name: confluent-zookeeper-certificates
-        configMap:
-          name: confluent-zookeeper-certificates
+          name: confluent-platform-certificates
 #       - name: service-certs
 #        secret:
 #          secretName: service-certs
@@ -704,8 +320,6 @@ spec:
       resources:
         requests:
           storage: "10Gi"
-
-
 
 ### Below here are the Helm Template-generated configs
 ---
