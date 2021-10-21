@@ -176,6 +176,8 @@ spec:
           value: /var/run/secrets/confluent.io/keystores/truststore.jks
         - name: keystore_jks
           value: /var/run/secrets/confluent.io/keystores/keystore.jks
+        - name: quorum_keystore_jks
+          value: /var/run/secrets/confluent.io/keystores/keystore.quorum.jks
         - name: keystorepass
           value: keystorepass
         - name: truststorepass
@@ -186,9 +188,14 @@ spec:
         - |
           export SERVER_CERT=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.crt.pem ;
           export SERVER_KEY=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.key.pem ;
+          export SERVER_QUORUM_CERT=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.quorum.crt.pem ;
+          export SERVER_QUORUM_KEY=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.quorum.key.pem ;
           cat $SERVER_CERT $rootca > /tmp/fullchain.pem ;
+          cat $SERVER_QUORUM_CERT $rootca > /tmp/fullchain.quorum.pem ;
           openssl pkcs12 -export -in /tmp/fullchain.pem -inkey $SERVER_KEY -name ${HOSTNAME} -out /tmp/server.p12 -password pass:$keystorepass ;
           keytool -importkeystore -srckeystore /tmp/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass ;
+          openssl pkcs12 -export -in /tmp/fullchain.quorum.pem -inkey $SERVER_QUORUM_KEY -name ${HOSTNAME} -out /tmp/server.quorum.p12 -password pass:$keystorepass ;
+          keytool -importkeystore -srckeystore /tmp/server.quorum.p12 -destkeystore $quorum_keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass ;
           keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass ;
         volumeMounts:
         - name: confluent-platform-certificates
@@ -288,6 +295,22 @@ spec:
         - name: ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD
           value: truststorepass
 #        - name: ZOOKEEPER_SSL_KEYSTORE_TYPE
+#          value:
+        - name: ZOOKEEPER_SSL_QUORUM
+          value: "true"
+        - name: ZOOKEEPER_SSL_QUORUM_CLIENT_AUTH
+          value: "true"
+        - name: ZOOKEEPER_SSL_QUORUM_KEYSTORE_LOCATION
+          value: /var/run/secrets/confluent.io/keystores/keystore.quorum.jks
+        - name: ZOOKEEPER_SSL_QUORUM_KEYSTORE_PASSWORD
+          value: keystorepass
+#        - name: ZOOKEEPER_SSL_QUORUM_KEYSTORE_TYPE
+#          value:
+        - name: ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_LOCATION
+          value: /var/run/secrets/confluent.io/keystores/truststore.jks
+        - name: ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_PASSWORD
+          value: truststorepass
+#        - name: ZOOKEEPER_SSL_QUORUM_TRUSTSTORE_TYPE
 #          value:
         command:
         - "bash"
