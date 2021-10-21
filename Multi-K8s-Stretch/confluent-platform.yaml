@@ -167,14 +167,6 @@ spec:
         env:
         - name: rootca
           value: /etc/ssl/certs/confluent/cp-RootCA.pem
-        - name: server-key
-          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.key.pem
-        - name: server-cert
-          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.crt.pem
-        - name: quorum-key
-          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.quorum.key.pem
-        - name: quorum-cert
-          value: /etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.quorum.crt.pem
         - name: truststore_jks
           value: /var/run/secrets/confluent.io/keystores/truststore.jks
         - name: keystore_jks
@@ -185,32 +177,19 @@ spec:
           value: truststorepass
         command:
         - "bash"
-        - "-cx"
+        - "-c"
         - |
-#         echo "ls /etc/ssl/certs/confluent/zookeeper/" ; ls /etc/ssl/certs/confluent/zookeeper/;
-#         echo "ls /var/run/secrets/confluent.io/keystores/"; ls /var/run/secrets/confluent.io/keystores/ ;
-#         echo "dump the keystore at $keystore_jks" &&
-#         keytool -list -v -keystore $keystore_jks ;
-#         echo "keytool -noprompt -import -keystore $keystore_jks -alias CARoot" &&
-#         keytool -noprompt -import -keystore $keystore_jks -alias CARoot -file $rootca -storepass $keystorepass -keypass $keystorepass ;
-
           export SERVER_CERT=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.crt.pem ;
-          export SERVER_KEY=/etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem
-          cat $SERVER_CERT $rootca > /etc/ssl/certs/confluent/fullchain.pem ;
-          openssl pkcs12 -export -in /etc/ssl/certs/confluent/fullchain.pem -inkey $SERVER_KEY -name ${HOSTNAME} -out /etc/ssl/certs/confluent/server.p12 -password pass:$keystorepass ;
-          keytool -importkeystore -srckeystore /etc/ssl/certs/confluent/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass;
-          keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass
-#         echo "keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file $server-key" &&
-#         keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file zookeeper-${HOSTNAME##*-}.key.pem -storepass $keystorepass -keypass $keystorepass ;
-#         echo "keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert" &&
-#         keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass
+          export SERVER_KEY=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.key.pem ;
+          cat $SERVER_CERT $rootca > /tmp/fullchain.pem ;
+          openssl pkcs12 -export -in /tmp/fullchain.pem -inkey $SERVER_KEY -name ${HOSTNAME} -out /tmp/server.p12 -password pass:$keystorepass ;
+          keytool -importkeystore -srckeystore /tmp/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass ;
+          keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass ;
         volumeMounts:
         - name: confluent-platform-certificates
           mountPath: /etc/ssl/certs/confluent
         - name: keystore-volume
           mountPath: /var/run/secrets/confluent.io/keystores
-#        - name: service-certs
-#          mountPath: /var/run/secrets/kubernetes.io/services_serving_certs
       containers:
       - name: prometheus-jmx-exporter
         image: "solsson/kafka-prometheus-jmx-exporter@sha256:6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143"
@@ -268,13 +247,25 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-          value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
+          value: "zookeeper-0.confluent:2888:3888;zookeeper-1.confluent:2888:3888;zookeeper-2.confluent:2888:3888"
+#          value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+
+        ## New settings for ssl
+        - name: truststore_jks
+          value: /var/run/secrets/confluent.io/keystores/truststore.jks
+        - name: keystore_jks
+          value: /var/run/secrets/confluent.io/keystores/keystore.jks
+        - name: keystorepass
+          value: keystorepass
+        - name: truststorepass
+          value: truststorepass
+
         command:
         - "bash"
         - "-c"
@@ -302,9 +293,6 @@ spec:
       - name: confluent-platform-certificates
         configMap:
           name: confluent-platform-certificates
-#       - name: service-certs
-#        secret:
-#          secretName: service-certs
   volumeClaimTemplates:
   - metadata:
       name: datadir
@@ -321,7 +309,7 @@ spec:
         requests:
           storage: "10Gi"
 
-### Below here are the Helm Template-generated configs
+### Below here are the untouchd Helm Template-generated configs
 ---
 # Source: cp-helm-charts/charts/cp-zookeeper/templates/poddisruptionbudget.yaml
 apiVersion: policy/v1
