@@ -14,6 +14,11 @@ spec:
       port: 2181
       targetPort: 2181
       #NodePort: 32181
+    - name: secureclient
+      protocol: TCP
+      port: 2182
+      targetPort: 2182
+      #NodePort: 32181
     - name: serverport
       protocol: TCP
       port: 2888
@@ -247,7 +252,7 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-          value: "zookeeper-0.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
+          value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
 #          value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
@@ -255,17 +260,35 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-
         ## New settings for ssl
-        - name: truststore_jks
-          value: /var/run/secrets/confluent.io/keystores/truststore.jks
-        - name: keystore_jks
+#        - name: truststore_jks
+#          value: /var/run/secrets/confluent.io/keystores/truststore.jks
+#        - name: keystore_jks
+#          value: /var/run/secrets/confluent.io/keystores/keystore.jks
+#        - name: keystorepass
+#          value: keystorepass
+#        - name: truststorepass
+#          value: truststorepass
+        - name: ZOOKEEPER_SSL_CLIENT_AUTH
+          value: "none"
+        - name: ZOOKEEPER_SECURE_CLIENT_PORT
+          value: "2182"
+        - name: ZOOKEEPER_SERVER_CNXN_FACTORY
+          value: "org.apache.zookeeper.server.NettyServerCnxnFactory"
+        - name: "ZOOKEEPER_AUTH_PROVIDER_X509"
+          value: "org.apache.zookeeper.server.auth.X509AuthenticationProvider"
+        - name: ZOOKEEPER_SSL_KEYSTORE_LOCATION
           value: /var/run/secrets/confluent.io/keystores/keystore.jks
-        - name: keystorepass
+        - name: ZOOKEEPER_SSL_KEYSTORE_PASSWORD
           value: keystorepass
-        - name: truststorepass
+#        - name: ZOOKEEPER_SSL_KEYSTORE_TYPE
+#          value:
+        - name: ZOOKEEPER_SSL_TRUSTSTORE_LOCATION
+          value: /var/run/secrets/confluent.io/keystores/truststore.jks
+        - name: ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD
           value: truststorepass
-
+#        - name: ZOOKEEPER_SSL_KEYSTORE_TYPE
+#          value:
         command:
         - "bash"
         - "-c"
