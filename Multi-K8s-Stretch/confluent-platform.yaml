@@ -167,7 +167,6 @@ data:
     bJZV08OA3qbaq0Jg9jsx9wg5Ow3gEb5tphBipZF++72ls3GnKTpz1PKZscBysaVx
     8xMKUCvf9H0N6chLp4sJKhSX0e/gpw==
     -----END CERTIFICATE-----
-
   zookeeper-1.key.pem: |
     Bag Attributes
         friendlyName: zookeeper-1.confluent
@@ -201,7 +200,6 @@ data:
     O2UZ/4TcL499wvun6wIDUTE/W/DYD9oEfCCq9AM1BPFUSWFGJGssdoIouL+/kf4P
     PTlxxpKyJWIo9AKbAs3EPZ4I
     -----END PRIVATE KEY-----
-
   zookeeper-1.quorum.crt.pem: |
     -----BEGIN CERTIFICATE-----
     MIIDPTCCAiWgAwIBAgIJAPWG4eigYKSsMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
@@ -223,7 +221,6 @@ data:
     BtqgVGXz39grOxulB/dEgYdopu06UlgFXGE29zKIqlT3A+K2neSO4mXu4FHxP2pp
     De94vn7lZl2XrGygTrXPWhk=
     -----END CERTIFICATE-----
-
   zookeeper-1.quorum.key.pem: |
     Bag Attributes
         friendlyName: zookeeper-1.confluent
@@ -257,7 +254,6 @@ data:
     0H3ylqvrCqveO2/ogCVW1xLtOn9YAi5bpx4qSvXBfVae9HWXhXjvQu9HQkHmUklf
     ts3Le4lV/Jgz8DZOaNBK6cPW
     -----END PRIVATE KEY-----
-
   zookeeper-2.key.pem: |
     Bag Attributes
         friendlyName: zookeeper-2.confluent
@@ -291,8 +287,6 @@ data:
     /ykCEhNTfkKjt0DLtDybXh50Gh7mFt5KNtwi2DgdDWKd/hp7iiLyT31237fy+fFQ
     aSbRa851xVlR1pd1/U3L74Ge
     -----END PRIVATE KEY-----
-
-
   zookeeper-2.crt.pem: |
     -----BEGIN CERTIFICATE-----
     MIIDcjCCAlqgAwIBAgIJAPWG4eigYKSeMA0GCSqGSIb3DQEBCwUAMGkxHTAbBgNV
@@ -315,7 +309,6 @@ data:
     WXe8FO6VqzF00eISJ/iDIUWVdP2Tq6y1IDqOAPJteoi9ZxHoiK75WeQ8Ichl0fE2
     ABKjyJkEn5egT7H/AFMPzStcobfxeA==
     -----END CERTIFICATE-----
-
   zookeeper-2.quorum.key.pem: |
     Bag Attributes
         friendlyName: zookeeper-2.confluent
@@ -551,24 +544,52 @@ spec:
         image: "confluentinc/cp-zookeeper:6.1.0"
         env:
         - name: rootca
-          value: /etc/ssl/certs/confluent/cp-RootCA.pem
-        - name: keystore_pkcs12
-          value: /var/run/secrets/java.io/keystores/keystore.pkcs12
+          value: /etc/ssl/certs/confluent/rootca/cp-RootCA.pem
+        - name: server-key
+          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem
+        - name: server-cert
+          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.crt.pem
+        - name: quorum-key
+          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.quorum.key.pem
+        - name: quorum-cert
+          value: /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.quorum.crt.pem
+        - name: truststore_jks
+          value: /var/run/secrets/confluent.io/keystores/truststore.jks
         - name: keystore_jks
-          value: /var/run/secrets/java.io/keystores/keystore.jks
-        - name: password
-          value: changeit
-        command: ['/bin/bash']
-        args: ['-c', "openssl pkcs12 -export -inkey $keyfile -in $crtfile -out $keystore_pkcs12 -password pass:$password && keytool -importkeystore -noprompt -srckeystore $keystore_pkcs12 -srcstoretype pkcs12 -destkeystore $keystore_jks -storepass $password -srcstorepass $password"]
-
+          value: /var/run/secrets/confluent.io/keystores/keystore.jks
+        - name: keystorepass
+          value: keystorepass
+        - name: truststorepass
+          value: truststorepass
+        command:
+        - "bash"
+        - "-c"
+        - |
+          #echo "ls /etc/ssl/certs/confluent/zookeeper/" ; ls /etc/ssl/certs/confluent/zookeeper/;
+          #echo "ls /var/run/secrets/confluent.io/keystores/"; ls /var/run/secrets/confluent.io/keystores/ ;
+          #echo "dump the keystore at $keystore_jks" &&
+          #keytool -list -v -keystore $keystore_jks ;
+          #echo "keytool -noprompt -import -keystore $keystore_jks -alias CARoot" &&
+          #keytool -noprompt -import -keystore $keystore_jks -alias CARoot -file $rootca -storepass $keystorepass -keypass $keystorepass ;
+          echo cat /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.crt.pem $rootca > /var/run/secrets/confluent.io/keystores/server.pem ;
+          cat /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.crt.pem $rootca > /var/run/secrets/confluent.io/keystores/server.pem ;
+          echo openssl pkcs12 -export -in /var/run/secrets/confluent.io/keystores/server.pem -inkey /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem -name ${HOSTNAME} -out /var/run/secrets/confluent.io/keystores/server.p12 -password pass:keystorepass ;
+          openssl pkcs12 -export -in /var/run/secrets/confluent.io/keystores/server.pem -inkey /etc/ssl/certs/confluent/zookeeper/zookeeper-${HOSTNAME##*-}.key.pem -name ${HOSTNAME} -out /var/run/secrets/confluent.io/keystores/server.p12 -password pass:$keystorepass ;
+          echo keytool -importkeystore -srckeystore /var/run/secrets/confluent.io/keystores/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME};
+          keytool -importkeystore -srckeystore /var/run/secrets/confluent.io/keystores/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass;
+          #echo "keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file $server-key" &&
+          #keytool -noprompt -import -keystore $keystore_jks -alias ${HOSTNAME} -file zookeeper-${HOSTNAME##*-}.key.pem -storepass $keystorepass -keypass $keystorepass ;
+          #echo "keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert" &&
+          #keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass
         volumeMounts:
         - name: confluent-cp-rootca
-          mountpath: /etc/ssl/certs/confluent
+          mountPath: /etc/ssl/certs/confluent/rootca
+        - name: confluent-zookeeper-certificates
+          mountPath: /etc/ssl/certs/confluent/zookeeper
         - name: keystore-volume
-          mountPath: /var/run/secrets/java.io/keystores
+          mountPath: /var/run/secrets/confluent.io/keystores
 #        - name: service-certs
 #          mountPath: /var/run/secrets/kubernetes.io/services_serving_certs
-
       containers:
       - name: prometheus-jmx-exporter
         image: "solsson/kafka-prometheus-jmx-exporter@sha256:6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143"
@@ -643,9 +664,11 @@ spec:
           /etc/confluent/docker/run
         volumeMounts:
         - name: confluent-cp-rootca
-          mountpath: /etc/ssl/certs/confluent
+          mountPath: /etc/ssl/certs/confluent/rootca
+        - name: confluent-zookeeper-certificates
+          mountPath: /etc/ssl/certs/confluent/zookeeper
         - name: keystore-volume
-          mountPath: /var/run/secrets/java.io/keystores
+          mountPath: /var/run/secrets/confluent.io/keystores
         - name: datadir
           mountPath: /var/lib/zookeeper/data
         - name: datalogdir
@@ -655,7 +678,14 @@ spec:
         configMap:
           name: confluent-cp-zookeeper-jmx-configmap
       - name: keystore-volume
-        emptyDir: {}
+        emptyDir:
+          medium: Memory
+      - name: confluent-cp-rootca
+        configMap:
+          name: confluent-cp-rootca
+      - name: confluent-zookeeper-certificates
+        configMap:
+          name: confluent-zookeeper-certificates
 #       - name: service-certs
 #        secret:
 #          secretName: service-certs
