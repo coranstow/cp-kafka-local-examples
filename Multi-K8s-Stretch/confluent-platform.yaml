@@ -250,7 +250,7 @@ spec:
         - name : ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL
           value: "24"
         - name: ZOOKEEPER_CLIENT_PORT
-          value: "2181"
+          value: "2180"
         - name : ZOOKEEPER_SERVERS
           value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
 #          value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
@@ -272,7 +272,7 @@ spec:
         - name: ZOOKEEPER_SSL_CLIENT_AUTH
           value: "none"
         - name: ZOOKEEPER_SECURE_CLIENT_PORT
-          value: "2182"
+          value: "2181"
         - name: ZOOKEEPER_SERVER_CNXN_FACTORY
           value: "org.apache.zookeeper.server.NettyServerCnxnFactory"
         - name: "ZOOKEEPER_AUTH_PROVIDER_X509"
