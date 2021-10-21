@@ -6,7 +6,7 @@ metadata:
   namespace: confluent
 spec:
   #type: LoadBalancer
-  type: ClusterIP
+  type: LoadBalancer
   externalTrafficPolicy: Local
   ports:
     - name: client
@@ -35,7 +35,7 @@ metadata:
   name: zookeeper-1
   namespace: confluent
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   externalTrafficPolicy: Local
   ports:
     - name: client
@@ -64,7 +64,7 @@ metadata:
   name: zookeeper-2
   namespace: confluent
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   externalTrafficPolicy: Local
   ports:
     - name: client
@@ -247,7 +247,7 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-          value: "zookeeper-0.confluent:2888:3888;zookeeper-1.confluent:2888:3888;zookeeper-2.confluent:2888:3888"
+          value: "zookeeper-0.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
 #          value: "confluent-cp-zookeeper-0.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-1.confluent-cp-zookeeper-headless.confluent:2888:3888;confluent-cp-zookeeper-2.confluent-cp-zookeeper-headless.confluent:2888:3888"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
