@@ -5,7 +5,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: confluent-platform-certificates
-  namespace:
+  namespace: confluent
   labels:
     app: cp-confluent-platform
 data:
@@ -986,12 +986,13 @@ data:
     kYmTksHf49HKDT6nnaPnq7DSYdOwTkxefX9pMxBUm3YVqvWZlVuQIEW8dkpSUIfV
     LHekyPmw5GifNx6L2IjrayCFxiWDN0UKPr330lQ8VQNdgw==
     -----END CERTIFICATE-----
+  control-center
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: confluent-zk-quorum-certificates
-  namespace:
+  namespace: confluent
   labels:
     app: cp-confluent-platform
 data:
