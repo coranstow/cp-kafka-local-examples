@@ -102,6 +102,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: confluent-cp-zookeeper
+  namespace: confluent
   labels:
     app: cp-zookeeper
     chart: cp-zookeeper-0.1.0
@@ -227,7 +228,7 @@ spec:
         - name : KAFKA_JMX_PORT
           value: "5555"
         - name : ZOOKEEPER_TICK_TIME
-          value: "2000"
+          value: "4000"
         - name : ZOOKEEPER_SYNC_LIMIT
           value: "5"
         - name : ZOOKEEPER_INIT_LIMIT
@@ -303,8 +304,8 @@ spec:
         - "bash"
         - "-c"
         - |
-          ZK_FIX_HOST_REGEX="s/${HOSTNAME}\.[^:]*:/0.0.0.0:/g"
-          ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+1)) \
+          ZK_FIX_HOST_REGEX="s/zookeeper-${HOSTNAME##*-}\.[^:]*:/0.0.0.0:/g"
+          ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+4)) \
           ZOOKEEPER_SERVERS=`echo $ZOOKEEPER_SERVERS | sed -e "$ZK_FIX_HOST_REGEX"` \
           /etc/confluent/docker/run
         volumeMounts:
