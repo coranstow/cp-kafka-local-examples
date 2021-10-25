@@ -165,14 +165,14 @@ spec:
         - "bash"
         - "-c"
         - |
-          export SERVER_CERT=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.crt.pem ;
-          export SERVER_KEY=/etc/ssl/certs/confluent/zookeeper-${HOSTNAME##*-}.key.pem ;
+          export SERVER_CERT=/etc/ssl/certs/confluent/zookeeper-$((${HOSTNAME##*-}+3)).crt.pem ;
+          export SERVER_KEY=/etc/ssl/certs/confluent/zookeeper-$((${HOSTNAME##*-}+3)).key.pem ;
           openssl pkcs12 -export -in $SERVER_CERT -CAfile $rootca -inkey $SERVER_KEY -name ${HOSTNAME} -chain -out /tmp/server.p12 -password pass:$keystorepass ;
           keytool -importkeystore -srckeystore /tmp/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass ;
           keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass ;
           for i in $(ls /etc/ssl/certs/confluent/*.crt.pem); do keytool -noprompt -importcert -alias $i -file $i -keystore $truststore_jks -trustcacerts -storepass $truststorepass; done
-          export SERVER_QUORUM_CERT=/etc/ssl/certs/zookeeper.quorum/zookeeper-${HOSTNAME##*-}.quorum.crt.pem ;
-          export SERVER_QUORUM_KEY=/etc/ssl/certs/zookeeper.quorum/zookeeper-${HOSTNAME##*-}.quorum.key.pem ;
+          export SERVER_QUORUM_CERT=/etc/ssl/certs/zookeeper.quorum/zookeeper-$((${HOSTNAME##*-}+3)).quorum.crt.pem ;
+          export SERVER_QUORUM_KEY=/etc/ssl/certs/zookeeper.quorum/zookeeper-$((${HOSTNAME##*-}+3)).quorum.key.pem ;
           openssl pkcs12 -export -in $SERVER_QUORUM_CERT -CAfile $rootca -inkey $SERVER_QUORUM_KEY -name ${HOSTNAME} -chain -out /tmp/server.quorum.p12 -password pass:$keystorepass ;
           keytool -importkeystore -srckeystore /tmp/server.quorum.p12 -destkeystore $quorum_keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass ;
           keytool -noprompt -keystore $quorum_truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass ;
@@ -304,7 +304,7 @@ spec:
         - "bash"
         - "-c"
         - |
-          ZK_FIX_HOST_REGEX="s/zookeeper-${HOSTNAME##*-}\.[^:]*:/0.0.0.0:/g"
+          ZK_FIX_HOST_REGEX="s/zookeeper-$((${HOSTNAME##*-}+3))\.[^:]*:/0.0.0.0:/g"
           ZOOKEEPER_SERVER_ID=$((${HOSTNAME##*-}+4)) \
           ZOOKEEPER_SERVERS=`echo $ZOOKEEPER_SERVERS | sed -e "$ZK_FIX_HOST_REGEX"` \
           /etc/confluent/docker/run
