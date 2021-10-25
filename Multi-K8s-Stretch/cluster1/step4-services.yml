@@ -14,6 +14,10 @@ spec:
       port: 2181
       targetPort: 2181
       #NodePort: 32181
+    - name: secureclient
+      protocol: TCP
+      port: 2182
+      targetPort: 2182
     - name: serverport
       protocol: TCP
       port: 2888
@@ -43,6 +47,10 @@ spec:
       port: 2181
       targetPort: 2181
       #NodePort: 32182
+    - name: secureclient
+      protocol: TCP
+      port: 2182
+      targetPort: 2182
     - name: serverport
       protocol: TCP
       port: 2888
@@ -72,6 +80,10 @@ spec:
       port: 2181
       targetPort: 2181
       #NodePort: 32183
+    - name: secureclient
+      protocol: TCP
+      port: 2182
+      targetPort: 2182
     - name: serverport
       protocol: TCP
       port: 2888

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cp-base-deployment
+spec:
+  selector:
+    matchLabels:
+      app: cp-base
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: cp-base
+    spec:
+      volumes:
+      - name: ca-pemstore
+        configMap:
+          name: ca-pemstore
+      containers:
+      - name: cp-base
+        image: confluentinc/cp-base:latest
+        command:
+          - sleep
+          - "3600"
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: ca-pemstore
+          mountPath: /etc/ssl/certs/my-cert.pem
+          #subPath: my-cert.pem
+          readOnly: false
+      restartPolicy: Always
+
+#        ports:
+#        - containerPort: 80
