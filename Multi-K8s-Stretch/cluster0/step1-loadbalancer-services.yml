@@ -85,6 +85,7 @@ spec:
       protocol: TCP
       port: 2182
       targetPort: 2182
+
     - name: serverport
       protocol: TCP
       port: 2888
