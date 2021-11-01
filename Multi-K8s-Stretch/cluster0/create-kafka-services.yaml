@@ -182,7 +182,7 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a41beb6bffa5a4c9586450fc204f4e98-943734755.ap-northeast-2.elb.amazonaws.com
+  externalName: a55eb0cdfd7e84e2090b2b7312b15f4e-855555883.ap-northeast-2.elb.amazonaws.com
 ---
 apiVersion: v1
 kind: Service
