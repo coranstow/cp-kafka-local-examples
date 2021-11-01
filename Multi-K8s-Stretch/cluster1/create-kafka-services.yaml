@@ -19,7 +19,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka-4-internal
+  name: kafka-3-internal
   namespace: confluent
 spec:
   #type: LoadBalancer
@@ -49,7 +49,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka-4-lb
+  name: kafka-3-lb
   namespace: confluent
 spec:
   type: LoadBalancer
@@ -68,6 +68,59 @@ spec:
   selector:
     release: confluent
     statefulset.kubernetes.io/pod-name: confluent-cp-kafka-0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-4-internal
+  namespace: confluent
+spec:
+  #type: LoadBalancer
+  type: ClusterIP
+  ports:
+    - name: external
+      protocol: TCP
+      port: 9092
+      targetPort: 9092
+    - name: http-external
+      protocol: TCP
+      port: 8090
+      targetPort: 8090
+    - name: internal
+      protocol: TCP
+      port: 9071
+      targetPort: 9071
+    - name: replication
+      protocol: TCP
+      port: 9072
+      targetPort: 9072
+  selector:
+    #app: cp-zookeeper
+    release: confluent
+    statefulset.kubernetes.io/pod-name: confluent-cp-kafka-1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-4-lb
+  namespace: confluent
+spec:
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: external
+      protocol: TCP
+      port: 9092
+      targetPort: 9092
+#      nodePort: 31894
+    - name: replication
+      protocol: TCP
+      port: 9072
+      targetPort: 9072
+  selector:
+    release: confluent
+    statefulset.kubernetes.io/pod-name: confluent-cp-kafka-1
 ---
 apiVersion: v1
 kind: Service
@@ -97,7 +150,7 @@ spec:
   selector:
     #app: cp-zookeeper
     release: confluent
-    statefulset.kubernetes.io/pod-name: confluent-cp-kafka-1
+    statefulset.kubernetes.io/pod-name: confluent-cp-kafka-2
 ---
 apiVersion: v1
 kind: Service
@@ -120,60 +173,16 @@ spec:
       targetPort: 9072
   selector:
     release: confluent
-    statefulset.kubernetes.io/pod-name: confluent-cp-kafka-1
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kafka-6-internal
-  namespace: confluent
-spec:
-  #type: LoadBalancer
-  type: ClusterIP
-  ports:
-    - name: external
-      protocol: TCP
-      port: 9092
-      targetPort: 9092
-    - name: http-external
-      protocol: TCP
-      port: 8090
-      targetPort: 8090
-    - name: internal
-      protocol: TCP
-      port: 9071
-      targetPort: 9071
-    - name: replication
-      protocol: TCP
-      port: 9072
-      targetPort: 9072
-  selector:
-    #app: cp-zookeeper
-    release: confluent
     statefulset.kubernetes.io/pod-name: confluent-cp-kafka-2
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka-6-lb
+  name: kafka-0-lb
   namespace: confluent
 spec:
-  type: LoadBalancer
-  sessionAffinity: None
-  externalTrafficPolicy: Cluster
-  ports:
-    - name: external
-      protocol: TCP
-      port: 9092
-      targetPort: 9092
-#      nodePort: 31894
-    - name: replication
-      protocol: TCP
-      port: 9072
-      targetPort: 9072
-  selector:
-    release: confluent
-    statefulset.kubernetes.io/pod-name: confluent-cp-kafka-2
+  type: ExternalName
+  externalName: aeea51b96d07ab499cab2de2f4fd48de509ea7860e6b-1761753249.ap-southeast-2.elb.amazonaws.com
 ---
 apiVersion: v1
 kind: Service
@@ -192,12 +201,3 @@ metadata:
 spec:
   type: ExternalName
   externalName: aa6181a6aeb0c4b4dac465363207d5c4-1366344450.ap-southeast-2.elb.amazonaws.com
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kafka-3-lb
-  namespace: confluent
-spec:
-  type: ExternalName
-  externalName: aeea51b96d07ab499cab2de2f4fd48de509ea7860e6b-1761753249.ap-southeast-2.elb.amazonaws.com
