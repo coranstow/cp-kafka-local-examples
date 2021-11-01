@@ -145,7 +145,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       initContainers:
       - name: pem-to-keystore
-        image: "confluentinc/cp-zookeeper:6.1.0"
+        image: "confluentinc/cp-zookeeper:6.2.1-10-ubi8"
         env:
         - name: rootca
           value: /etc/ssl/certs/confluent/cp-RootCA.pem
@@ -207,7 +207,7 @@ spec:
         - name: jmx-config
           mountPath: /etc/jmx-zookeeper
       - name: cp-zookeeper-server
-        image: "confluentinc/cp-zookeeper:6.1.0"
+        image: "confluentinc/cp-zookeeper:6.2.1-10-ubi8"
         imagePullPolicy: "IfNotPresent"
         securityContext:
           runAsUser: 0
