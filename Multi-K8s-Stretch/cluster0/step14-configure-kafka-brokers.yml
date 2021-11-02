@@ -172,7 +172,7 @@ spec:
         - -exc
         - |
           export KAFKA_BROKER_ID=${HOSTNAME##*-} && \
-          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.confluentexample.com:9092,INTERNAL://${POD_NAME}.confluent-cp-kafka-headless.${POD_NAMESPACE}:9071,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
+          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.confluentexample.com:9092,INTERNAL://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9071,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
           exec /etc/confluent/docker/run
         volumeMounts:
           - name: datadir-0
