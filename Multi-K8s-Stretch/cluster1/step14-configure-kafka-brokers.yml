@@ -13,7 +13,7 @@ spec:
     matchLabels:
       app: cp-kafka
       release: confluent
-  serviceName: confluent-cp-kafka-headless
+  serviceName: confluent-cp-kafka-headless-1
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
@@ -135,7 +135,7 @@ spec:
         - name: KAFKA_METRIC_REPORTERS
           value: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
         - name: CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS
-          value: "PLAINTEXT://confluent-cp-kafka-headless:9092"
+          value: "PLAINTEXT://confluent-cp-kafka-headless-1:9092"
         #Kafka Broker Settings
         - name: "KAFKA_LISTENERS"
           value: "EXTERNAL://:9092,INTERNAL://:9071,REPLICATION://:9072"
