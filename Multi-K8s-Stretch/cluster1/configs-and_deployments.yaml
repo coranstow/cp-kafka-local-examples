@@ -303,7 +303,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: confluent-cp-kafka-headless
+  name: confluent-cp-kafka-headless-1
   labels:
     app: cp-kafka
     chart: cp-kafka-0.1.0
@@ -382,7 +382,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: confluent-cp-zookeeper-headless
+  name: confluent-cp-zookeeper-headless-1
   labels:
     app: cp-zookeeper
     chart: cp-zookeeper-0.1.0
