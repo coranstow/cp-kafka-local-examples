@@ -13,7 +13,6 @@ spec:
     matchLabels:
       app: cp-kafka
       release: confluent
-  serviceName: confluent-cp-kafka-headless
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
@@ -136,14 +135,14 @@ spec:
         - name: KAFKA_METRIC_REPORTERS
           value: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
         - name: CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS
-          value: "PLAINTEXT://confluent-cp-kafka-headless:9092"
+          value: "PLAINTEXT://kafka-bootstrap-lb:9092"
         #Kafka Broker Settings
         - name: "KAFKA_LISTENERS"
-          value: "EXTERNAL://:9092,INTERNAL://:9071,REPLICATION://:9072"
+          value: "EXTERNAL://:9092,REPLICATION://:9072"
         - name: "KAFKA_INTER_BROKER_LISTENER_NAME"
           value: "REPLICATION"
         - name: "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP"
-          value: "EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT,REPLICATION:PLAINTEXT"
+          value: "EXTERNAL:PLAINTEXT,REPLICATION:PLAINTEXT"
         - name: "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR"
           value: "3"
         - name: KAFKA_JMX_PORT
@@ -172,7 +171,7 @@ spec:
         - -exc
         - |
           export KAFKA_BROKER_ID=${HOSTNAME##*-} && \
-          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.confluentexample.com:9092,INTERNAL://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9071,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
+          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.confluentexample.com:9092,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
           exec /etc/confluent/docker/run
         volumeMounts:
           - name: datadir-0
