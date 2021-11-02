@@ -62,8 +62,9 @@ spec:
         - "-c"
         - |
           export ORDINAL=${HOSTNAME##*-} &&
-          export KAFKA_BROKER_ID=$(($ORDINAL+3)) &&
+          export KAFKA_BROKER_ID=$ORDINAL &&
           export BROKER_NAME=kafka-$KAFKA_BROKER_ID
+          echo Broker name is $BROKER_NAME
           export SERVER_CERT=/etc/ssl/certs/confluent/$BROKER_NAME.crt.pem &&
           export SERVER_KEY=/etc/ssl/certs/confluent/$BROKER_NAME.key.pem &&
           openssl pkcs12 -export -in $SERVER_CERT -CAfile $rootca -inkey $SERVER_KEY -name ${HOSTNAME} -chain -out /tmp/server.p12 -password pass:$keystorepass &&
@@ -171,7 +172,7 @@ spec:
         - -exc
         - |
           export KAFKA_BROKER_ID=${HOSTNAME##*-} && \
-          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.example.com:9092,INTERNAL://${POD_NAME}.confluent-cp-kafka-headless.${POD_NAMESPACE}:9071,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
+          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.confluentexample.com:9092,INTERNAL://${POD_NAME}.confluent-cp-kafka-headless.${POD_NAMESPACE}:9071,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
           exec /etc/confluent/docker/run
         volumeMounts:
           - name: datadir-0

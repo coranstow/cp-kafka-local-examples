@@ -61,11 +61,14 @@ spec:
         - "bash"
         - "-c"
         - |
-          export SERVER_CERT=/etc/ssl/certs/confluent/${HOSTNAME}.crt.pem ;
-          export SERVER_KEY=/etc/ssl/certs/confluent/${HOSTNAME}.key.pem ;
-          openssl pkcs12 -export -in $SERVER_CERT -CAfile $rootca -inkey $SERVER_KEY -name ${HOSTNAME} -chain -out /tmp/server.p12 -password pass:$keystorepass ;
-          keytool -importkeystore -srckeystore /tmp/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass ;
-          keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass ;
+          export ORDINAL=${HOSTNAME##*-} &&
+          export KAFKA_BROKER_ID=$(($ORDINAL+3)) &&
+          export BROKER_NAME=kafka-$KAFKA_BROKER_ID &&
+          export SERVER_CERT=/etc/ssl/certs/confluent/$BROKER_NAME.crt.pem &&
+          export SERVER_KEY=/etc/ssl/certs/confluent/$BROKER_NAME.key.pem &&
+          openssl pkcs12 -export -in $SERVER_CERT -CAfile $rootca -inkey $SERVER_KEY -name ${HOSTNAME} -chain -out /tmp/server.p12 -password pass:$keystorepass &&
+          keytool -importkeystore -srckeystore /tmp/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass &&
+          keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass &&
           for i in $(ls /etc/ssl/certs/confluent/*.crt.pem); do keytool -noprompt -importcert -alias $i -file $i -keystore $truststore_jks -trustcacerts -storepass $truststorepass; done
         volumeMounts:
         - name: confluent-platform-certificates
@@ -126,7 +129,7 @@ spec:
         - name: KAFKA_HEAP_OPTS
           value: -Xms512M -Xmx512M
         - name: KAFKA_ZOOKEEPER_CONNECT
-          value: "zookeeper-0.confluent:2182,zookeeper-1.confluent:2182,zookeeper-2.confluent:2182"
+          value: "zookeeper-3.confluent:2182,zookeeper-4.confluent:2182,zookeeper-5.confluent:2182"
         - name: KAFKA_LOG_DIRS
           value: "/opt/kafka/data-0/logs"
         - name: KAFKA_METRIC_REPORTERS
@@ -167,7 +170,8 @@ spec:
         - sh
         - -exc
         - |
-          export KAFKA_BROKER_ID=${HOSTNAME##*-} && \
+          export ORDINAL=${HOSTNAME##*-} &&
+          export KAFKA_BROKER_ID=$(($ORDINAL+3)) &&
           export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b${HOSTNAME##*-}.example.com:9092,INTERNAL://${POD_NAME}.confluent-cp-kafka-headless.${POD_NAMESPACE}:9071,REPLICATION://kafka-${HOSTNAME##*-}-lb.${POD_NAMESPACE}:9072 && \
           exec /etc/confluent/docker/run
         volumeMounts:
