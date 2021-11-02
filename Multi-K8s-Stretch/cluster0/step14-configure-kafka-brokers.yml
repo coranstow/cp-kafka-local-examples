@@ -13,6 +13,7 @@ spec:
     matchLabels:
       app: cp-kafka
       release: confluent
+  serviceName: confluent-cp-kafka-headless
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
