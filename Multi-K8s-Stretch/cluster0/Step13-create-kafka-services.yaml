@@ -11,7 +11,7 @@ spec:
       targetPort: 9092
 #      nodePort: 32349
   selector:
-    app: confluent-cp-kafka
+    app: cp-kafka
   type: LoadBalancer
   sessionAffinity: None
   externalTrafficPolicy: Local
