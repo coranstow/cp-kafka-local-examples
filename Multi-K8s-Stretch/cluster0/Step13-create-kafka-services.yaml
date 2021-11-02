@@ -200,4 +200,4 @@ metadata:
   namespace: confluent
 spec:
   type: ExternalName
-  externalName: a6a41845f998a4cbc9a8e7e349f427aa-1927252033.ap-northeast-2.elb.amazonaws.com
+  externalName: a91fd4bfba0a149f3850be3b163eba05-270198120.ap-northeast-2.elb.amazonaws.com
