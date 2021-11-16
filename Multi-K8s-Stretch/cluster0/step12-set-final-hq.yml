@@ -166,7 +166,7 @@ spec:
 #        - name: truststorepass
 #          value: truststorepass
         - name: ZOOKEEPER_SSL_CLIENT_AUTH
-          value: "need"
+          value: "none"
         - name: ZOOKEEPER_SECURE_CLIENT_PORT
           value: "2182"
         - name: ZOOKEEPER_SERVER_CNXN_FACTORY

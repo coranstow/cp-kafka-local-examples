@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: confluent-cp-kafka
+  namespace: confluent
   labels:
     app: cp-kafka
     chart: cp-kafka-0.1.0
@@ -45,7 +46,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       initContainers:
       - name: pem-to-keystore
-        image: "confluentinc/cp-zookeeper:6.2.1-10-ubi8"
+        image: "confluentinc/cp-server:6.2.1"
         env:
         - name: rootca
           value: /etc/ssl/certs/confluent/cp-RootCA.pem
@@ -129,7 +130,7 @@ spec:
         - name: KAFKA_HEAP_OPTS
           value: -Xms512M -Xmx512M
         - name: KAFKA_ZOOKEEPER_CONNECT
-          value: "confluent-cp-zookeeper-headless:2181"
+          value: "zookeeper-3:2182,zookeeper-4:2182,zookeeper-5:2182"
         - name: KAFKA_LOG_DIRS
           value: "/opt/kafka/data-0/logs"
         - name: KAFKA_METRIC_REPORTERS
