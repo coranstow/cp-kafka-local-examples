@@ -1,0 +1,201 @@
+# Source: cp-helm-charts/charts/cp-kafka/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: confluent-cp-kafka
+  labels:
+    app: cp-kafka
+    chart: cp-kafka-0.1.0
+    release: confluent
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: cp-kafka
+      release: confluent
+  serviceName: confluent-cp-kafka-headless
+  podManagementPolicy: OrderedReady
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: cp-kafka
+        release: confluent
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5556"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - cp-kafka
+                  - key: "release"
+                    operator: In
+                    values:
+                    - confluent
+              topologyKey: "kubernetes.io/hostname"
+      initContainers:
+      - name: pem-to-keystore
+        image: "confluentinc/cp-zookeeper:6.2.1-10-ubi8"
+        env:
+        - name: rootca
+          value: /etc/ssl/certs/confluent/cp-RootCA.pem
+        - name: truststore_jks
+          value: /var/run/secrets/confluent.io/keystores/truststore.jks
+        - name: keystore_jks
+          value: /var/run/secrets/confluent.io/keystores/keystore.jks
+        - name: keystorepass
+          value: keystorepass
+        - name: truststorepass
+          value: truststorepass
+        command:
+        - "bash"
+        - "-c"
+        - |
+          export ORDINAL=${HOSTNAME##*-} &&
+          export KAFKA_BROKER_ID=$(($ORDINAL+3)) &&
+          export BROKER_NAME=kafka-$KAFKA_BROKER_ID &&
+          export SERVER_CERT=/etc/ssl/certs/confluent/$BROKER_NAME.crt.pem &&
+          export SERVER_KEY=/etc/ssl/certs/confluent/$BROKER_NAME.key.pem &&
+          openssl pkcs12 -export -in $SERVER_CERT -CAfile $rootca -inkey $SERVER_KEY -name ${HOSTNAME} -chain -out /tmp/server.p12 -password pass:$keystorepass &&
+          keytool -importkeystore -srckeystore /tmp/server.p12 -destkeystore $keystore_jks -srcstoretype pkcs12 -alias ${HOSTNAME} -storepass $keystorepass -keypass $keystorepass -srcstorepass $keystorepass &&
+          keytool -noprompt -keystore $truststore_jks -alias CARoot -importcert -file $rootca -storepass $truststorepass -keypass $truststorepass &&
+          for i in $(ls /etc/ssl/certs/confluent/*.crt.pem); do keytool -noprompt -importcert -alias $i -file $i -keystore $truststore_jks -trustcacerts -storepass $truststorepass; done
+        volumeMounts:
+        - name: confluent-platform-certificates
+          mountPath: /etc/ssl/certs/confluent
+        - name: keystore-volume
+          mountPath: /var/run/secrets/confluent.io/keystores
+      containers:
+      - name: prometheus-jmx-exporter
+        image: "solsson/kafka-prometheus-jmx-exporter@sha256:6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143"
+        imagePullPolicy: "IfNotPresent"
+        command:
+        - java
+        - -XX:+UnlockExperimentalVMOptions
+        - -XX:+UseCGroupMemoryLimitForHeap
+        - -XX:MaxRAMFraction=1
+        - -XshowSettings:vm
+        - -jar
+        - jmx_prometheus_httpserver.jar
+        - "5556"
+        - /etc/jmx-kafka/jmx-kafka-prometheus.yml
+        ports:
+        - containerPort: 5556
+        resources:
+          {}
+        volumeMounts:
+        - name: jmx-config
+          mountPath: /etc/jmx-kafka
+      - name: cp-kafka-broker
+        image: "confluentinc/cp-server:6.2.1"
+#        image: "confluentinc/cp-server:6.1.0"
+        imagePullPolicy: "IfNotPresent"
+        securityContext:
+          runAsUser: 0
+        ports:
+        - containerPort: 9092
+          name: kafka
+        - containerPort: 5555
+          name: jmx
+        resources:
+          {}
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: KAFKA_HEAP_OPTS
+          value: -Xms512M -Xmx512M
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: "confluent-cp-zookeeper-headless:2181"
+        - name: KAFKA_LOG_DIRS
+          value: "/opt/kafka/data-0/logs"
+        - name: KAFKA_METRIC_REPORTERS
+          value: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
+        - name: CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS
+          value: "PLAINTEXT://kafka-bootstrap-lb:9092"
+        #Kafka Broker Settings
+        - name: "KAFKA_LISTENERS"
+          value: "EXTERNAL://:9092,REPLICATION://:9072"
+        - name: "KAFKA_INTER_BROKER_LISTENER_NAME"
+          value: "REPLICATION"
+        - name: "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP"
+          value: "EXTERNAL:PLAINTEXT,REPLICATION:PLAINTEXT"
+        - name: "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR"
+          value: "3"
+        - name: KAFKA_JMX_PORT
+          value: "5555"
+        - name: KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS
+          value: "20000"
+        # SSL Settings for mTLS with the Zookeeper ensemble
+        - name: KAFKA_ZOOKEEPER_CLIENT_CNXN_SOCKET
+          value: "org.apache.zookeeper.ClientCnxnSocketNetty"
+        - name: KAFKA_ZOOKEEPER_SSL_CLIENT_ENABLE
+          value: "true"
+        - name: KAFKA_ZOOKEEPER_SSL_KEYSTORE_LOCATION
+          value: /var/run/secrets/confluent.io/keystores/keystore.jks
+        - name: KAFKA_ZOOKEEPER_SSL_KEYSTORE_PASSWORD
+          value: "keystorepass"
+        - name: KAFKA_ZOOKEEPER_SSL_TRUSTSTORE_LOCATION
+          value: /var/run/secrets/confluent.io/keystores/truststore.jks
+        - name: KAFKA_ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD
+          value: "truststorepass"
+        # This is required because the Downward API does not yet support identification of
+        # pod numbering in statefulsets. Thus, we are required to specify a command which
+        # allows us to extract the pod ID for usage as the Kafka Broker ID.
+        # See: https://github.com/kubernetes/kubernetes/issues/31218
+        command:
+        - sh
+        - -exc
+        - |
+          export ORDINAL=${HOSTNAME##*-} &&
+          export KAFKA_BROKER_ID=$(($ORDINAL+3)) &&
+          export KAFKA_ADVERTISED_LISTENERS=EXTERNAL://b$KAFKA_BROKER_ID.confluentexample.com:9092,REPLICATION://kafka-$KAFKA_BROKER_ID-lb.${POD_NAMESPACE}:9072 && \
+          exec /etc/confluent/docker/run
+        volumeMounts:
+          - name: datadir-0
+            mountPath: /opt/kafka/data-0
+          - name: confluent-platform-certificates
+            mountPath: /etc/ssl/certs/confluent/
+          - name: keystore-volume
+            mountPath: /var/run/secrets/confluent.io/keystores
+      volumes:
+      - name: jmx-config
+        configMap:
+          name: confluent-cp-kafka-jmx-configmap
+      - name: keystore-volume
+        emptyDir:
+          medium: Memory
+      - name: confluent-platform-certificates
+        configMap:
+          name: confluent-platform-certificates
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir-0
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "50Gi"

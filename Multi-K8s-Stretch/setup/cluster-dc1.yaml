@@ -3,9 +3,18 @@ kind: ClusterConfig
 
 metadata:
   name: eks-cstow-dc1
-  region: ap-northeast-2
+  region: ap-southeast-2
+
+vpc:
+  cidr: 10.11.0.0/16
+  autoAllocateIPv6: true
+  
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
 
 nodeGroups:
-  - name: ng-1
+  - name: ng-1-1
     instanceType: t3.medium
     desiredCapacity: 3
